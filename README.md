@@ -15,19 +15,6 @@ Ante esta fragmentación, surge la necesidad de un **sistema unificado de gesti�
 
 ---
 
-## 🧩 Justificación desde la Ingeniería del Software
-
-El desarrollo de este sistema requiere aplicar principios de **Ingeniería del Software** por varias razones:
-
-* Implica **integración entre múltiples entidades** (hospitales, aseguradoras, centros privados, sistemas públicos).
-* Maneja **datos sensibles** (información sanitaria personal protegida por el RGPD).
-* Requiere **alta disponibilidad, fiabilidad y seguridad**, ya que afecta directamente a la atención médica.
-* Necesita **planificación estructurada** para coordinar distintos equipos técnicos, APIs externas y fases de validación.
-
-Por tanto, no se trata de una simple aplicación web, sino de un **proyecto de ingeniería multidisciplinar** que debe seguir un ciclo de vida bien definido, con control de calidad, métricas y gestión de riesgos.
-
----
-
 ## 🎯 Objetivos
 
 ### 🔸 Objetivo general
