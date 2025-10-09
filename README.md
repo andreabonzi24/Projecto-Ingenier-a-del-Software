@@ -159,6 +159,10 @@ rectangle "Plataforma de Citas Médicas" {
 @enduml
 ```
 
+<p align="center">
+  <img src="img/1.png" alt="Diagrama de Casos de Uso" width="700px">
+</p>
+
 ---
 
 ## 🧮 Diagrama de Clases (PlantUML)
@@ -212,6 +216,11 @@ class Aseguradora {
 }
 @enduml
 ```
+
+<p align="center">
+  <img src="img/2.png" alt="Diagrama de Clases UML" width="700px">
+</p>
+
 
 ---
 
@@ -278,6 +287,10 @@ Coord --> (Revisión semanal)
 @enduml
 ```
 
+<p align="center">
+  <img src="img/3.png" alt="Flujo Scrumban + XP" width="700px">
+</p>
+
 ---
 
 # 🧩 T4 – Calidad, Pruebas y Validación
@@ -339,6 +352,10 @@ QA --> (Revisión de PR)
 (Despliegue automático QA) --> Profesor : Validación final / Demo
 @enduml
 ```
+
+<p align="center">
+  <img src="img/4.png" alt="Flujo de Aseguramiento de Calidad" width="700px">
+</p>
 
 ---
 
