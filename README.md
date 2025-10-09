@@ -217,7 +217,6 @@ class Aseguradora {
 
 El sistema se desarrolla con una metodología **ágil híbrida: Scrumban + Extreme Programming (XP)**.
 Combina la **flexibilidad de Kanban**, la **planificación ligera de Scrum** y las **buenas prácticas técnicas de XP** (TDD, CI/CD, refactorización).
-Es perfecta para un equipo de **3 personas** y un plazo de **3 semanas**.
 
 ---
 
