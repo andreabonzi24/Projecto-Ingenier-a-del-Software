@@ -1,4 +1,4 @@
-# 🏥 Plataforma de Citas Médicas
+# 🏥 Plataforma de Citas Médicas 
 
 ## 🧠 Contexto y motivación
 
