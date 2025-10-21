@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plataforma de Citas Médicas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0c7e7c",
+            "background-light": "#f4f8f8",
+            "background-dark": "#112121",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center">
+<div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1 px-4 sm:px-6 lg:px-8">
+<!-- Header / Navbar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 dark:border-primary/30 px-4 sm:px-6 lg:px-10 py-3">
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Plataforma de Citas Médicas</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8 text-[#0e1b1b] dark:text-gray-300">
+<a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-white" href="#inicio">Inicio</a>
+<a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-white" href="#caracteristicas">Características</a>
+<a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-white" href="#ventajas">Ventajas</a>
+<a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-white" href="#contacto">Contacto</a>
+</nav>
+<button class="hidden md:flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Iniciar sesión</span>
+</button>
+<button class="md:hidden flex items-center justify-center rounded-lg h-10 w-10 bg-transparent text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="flex flex-col gap-10 md:gap-20">
+<!-- Hero Section -->
+<section class="w-full py-10 md:py-20" id="inicio">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+<div class="flex flex-col gap-6 text-left">
+<h1 class="text-[#0e1b1b] dark:text-white text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em]">
+                    Reserva tu cita médica más rápido y desde un solo lugar
+                  </h1>
+<p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal">
+                    Centralizamos la disponibilidad de hospitales y clínicas para que elijas la opción más rápida y cercana.
+                  </p>
+<div class="flex flex-wrap gap-4 mt-4">
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-shadow shadow-lg hover:shadow-xl">
+<span class="truncate">Iniciar sesión</span>
+</button>
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+<span class="truncate">Conoce más</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-center">
+<img alt="Vector illustration of doctors and medical technology" class="w-full max-w-md rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBimzuL1Ac1I1ejvyMTZuubonIC_am9lr-0RBI0pTx_JUwJmyM_-9J62vRq5UGHMf84VFgECJyd2o-TPfM8Jr6_ugsIG9cBJJwbP-AVvXuaxlC3eO40OgX89xwqabD1mbLdQwwiBc2eGA84ma--6P7cA5Q1YreCT8GUzCqiOK8e5A6_uwvCa269Gw3aqmn6DK5gd865R5BF4i-v8S6NPwz8tHDDibShsktMPvRTM5uGT19NVFxH4mqSaPNA71h5Vxei8P1uj_WOVMs"/>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-10 md:py-20" id="ventajas">
+<div class="flex flex-col gap-4 text-center mb-10">
+<h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                  Cómo funciona
+                </h2>
+<p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal max-w-3xl mx-auto">Tres sencillos pasos para conseguir tu cita.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary text-4xl"><span class="material-symbols-outlined !text-4xl">badge</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Inicia sesión con tu tarjeta sanitaria</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Accede de forma segura con tus credenciales.</p>
+</div>
+<div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary text-4xl"><span class="material-symbols-outlined !text-4xl">search</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Busca la prueba o especialidad</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Encuentra lo que necesitas con nuestro buscador inteligente.</p>
+</div>
+<div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary text-4xl"><span class="material-symbols-outlined !text-4xl">calendar_add_on</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Confirma tu cita en el centro más rápido</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Elige la opción que mejor se adapte a ti y confirma.</p>
+</div>
+</div>
+</section>
+<!-- Key Features Section -->
+<section class="py-10 md:py-20" id="caracteristicas">
+<div class="flex flex-col gap-4 text-center mb-10">
+<h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                  Características clave
+                </h2>
+<p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal max-w-3xl mx-auto">Descubre por qué somos la mejor opción para gestionar tus citas médicas.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary"><span class="material-symbols-outlined !text-4xl">manage_search</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Búsqueda inteligente</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Nuestro sistema de búsqueda te ayuda a encontrar la mejor opción.</p>
+</div>
+<div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary"><span class="material-symbols-outlined !text-4xl">domain</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Red pública y privada</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Accede a la red de hospitales y clínicas más amplia.</p>
+</div>
+<div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary"><span class="material-symbols-outlined !text-4xl">schedule</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Citas más rápidas</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Consigue tu cita en tiempo récord gracias a nuestro sistema.</p>
+</div>
+<div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow">
+<div class="text-primary"><span class="material-symbols-outlined !text-4xl">verified_user</span></div>
+<h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">Seguridad RGPD</h3>
+<p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">Tus datos están protegidos y seguros con nosotros.</p>
+</div>
+</div>
+</section>
+<!-- Login Section -->
+<section class="py-10 md:py-20" id="contacto">
+<div class="max-w-2xl mx-auto bg-white dark:bg-background-dark p-8 rounded-xl shadow-2xl">
+<div class="flex flex-col gap-2 text-center mb-8">
+<h2 class="text-[#0e1b1b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">
+                    Accede a tu cuenta
+                  </h2>
+<p class="text-[#4d9997] dark:text-gray-400 text-base font-normal leading-normal">
+                    ¿No tienes cuenta? <a class="text-primary font-semibold hover:underline" href="#">Regístrate</a>
+</p>
+</div>
+<form class="flex flex-col gap-6">
+<div>
+<label class="sr-only" for="email">Email o número de tarjeta sanitaria</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0e1b1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary h-14 placeholder:text-[#4d9997] px-4 bg-gray-100 dark:bg-gray-800 border-transparent focus:border-transparent text-base font-normal leading-normal" id="email" placeholder="Email o número de tarjeta sanitaria" type="text"/>
+</div>
+<div>
+<label class="sr-only" for="password">Contraseña</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0e1b1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary h-14 placeholder:text-[#4d9997] px-4 bg-gray-100 dark:bg-gray-800 border-transparent focus:border-transparent text-base font-normal leading-normal" id="password" placeholder="Contraseña" type="password"/>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors w-full" type="submit">
+<span class="truncate">Entrar</span>
+</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-10 md:mt-20 py-8 border-t border-solid border-primary/20 dark:border-primary/30">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center">
+<p class="text-sm text-[#4d9997] dark:text-gray-400">MIT © 2025 – Plataforma de Citas Médicas</p>
+<div class="flex gap-4">
+<a class="text-sm text-[#4d9997] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Política de privacidad</a>
+<a class="text-sm text-[#4d9997] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">Contacto</a>
+<a class="text-sm text-[#4d9997] dark:text-gray-400 hover:text-primary dark:hover:text-white" href="#">GitHub</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body></html>

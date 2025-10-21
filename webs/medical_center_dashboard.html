@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Medical Center Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112121",
+                        "container-light": "#ffffff",
+                        "container-dark": "#1a2c2c",
+                        "text-light": "#0e1b1b",
+                        "text-dark": "#f8fcfc",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-container-light dark:bg-container-dark text-text-light dark:text-text-dark flex flex-col border-r border-gray-200 dark:border-gray-700">
+<div class="p-4 flex items-center gap-3 border-b border-gray-200 dark:border-gray-700">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold">Plataforma de Citas</h1>
+<p class="text-sm text-gray-500 dark:text-gray-400">Centro Médico San José</p>
+</div>
+</div>
+<nav class="flex-1 px-2 py-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/20 text-primary dark:text-primary" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-medium">Disponibilidad</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<span class="material-symbols-outlined">book_online</span>
+<span class="font-medium">Citas programadas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-medium">Profesionales</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-medium">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-light dark:text-text-dark hover:bg-primary/10 dark:hover:bg-primary/20" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Ajustes</span>
+</a>
+</nav>
+<div class="p-4 border-t border-gray-200 dark:border-gray-700">
+<button class="w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-bold hover:bg-red-500/20">
+<span class="material-symbols-outlined">logout</span>
+<span>Cerrar sesión</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-gray-700 px-6 py-4 bg-container-light dark:bg-container-dark">
+<h1 class="text-xl font-bold text-text-light dark:text-text-dark">Panel de disponibilidad</h1>
+<div class="flex items-center gap-4">
+<p class="text-sm text-text-light dark:text-text-dark">Admin Name</p>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar with abstract pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGfTNPk5r0CON7xkFAjeLsqE5kQPC28BT-3jGiawk9Cks62QIz8Se1gAlSQVy0uBfD2RtTzeiFH57t9iXOHJ2J3FZLIlNIHWy_P-Pyat-31KZR8S8-ibid1dtghk8wYPMrDBLHrv-jAgRTGSfIMdk7NW2tQHxs2YYcCxxTXET7WYwGe4wyotWncjOP-8M0JUF7X18AeOyZi-9QBsrzRwEMAX417YU4ZDTD0LvDfKg2FX670gv5Ud3ZcqMOKgIi_0iiivq_dFdihqM");'></div>
+</div>
+</header>
+<!-- Content Area -->
+<main class="flex-1 overflow-x-hidden overflow-y-auto bg-background-light dark:bg-background-dark p-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Availability Panel -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl shadow-sm">
+<div class="flex flex-col">
+<div class="flex items-center p-1 justify-between">
+<button class="text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<p class="text-text-light dark:text-text-dark text-base font-bold leading-tight flex-1 text-center">October 2024</p>
+<button class="text-text-light dark:text-text-dark">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 text-center">
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">S</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">M</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">T</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">W</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">T</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">F</p>
+<p class="text-text-light/70 dark:text-text-dark/70 text-xs font-bold py-3">S</p>
+<button class="h-10 w-full text-text-light/50 dark:text-text-dark/50 text-sm font-medium col-start-3"><div class="flex size-full items-center justify-center rounded-full">1</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">2</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">3</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">4</div></button>
+<button class="h-10 w-full text-white text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full bg-primary">5</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">6</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">7</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">8</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">9</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">10</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">11</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">12</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">13</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">14</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">15</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">16</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">17</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">18</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">19</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">20</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">21</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">22</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">23</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">24</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">25</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">26</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">27</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">28</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">29</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">30</div></button>
+<button class="h-10 w-full text-text-light dark:text-text-dark text-sm font-medium"><div class="flex size-full items-center justify-center rounded-full hover:bg-primary/10">31</div></button>
+</div>
+<button class="mt-6 flex w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90">
+<span class="truncate">Añadir horario disponible</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Scheduled Appointments -->
+<div class="lg:col-span-2 bg-container-light dark:bg-container-dark p-6 rounded-xl shadow-sm">
+<h2 class="text-lg font-bold text-text-light dark:text-text-dark mb-4">Citas programadas</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-text-light dark:text-text-dark">
+<thead class="text-xs uppercase bg-background-light dark:bg-background-dark">
+<tr>
+<th class="px-6 py-3" scope="col">Paciente</th>
+<th class="px-6 py-3" scope="col">Prueba</th>
+<th class="px-6 py-3" scope="col">Fecha y Hora</th>
+<th class="px-6 py-3" scope="col">Estado</th>
+<th class="px-6 py-3" scope="col">Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<td class="px-6 py-4">Juan Pérez</td>
+<td class="px-6 py-4">Cardiología</td>
+<td class="px-6 py-4">Oct 5, 2024 - 10:00 AM</td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Confirmado</span></td>
+<td class="px-6 py-4 flex gap-2"><button class="text-red-500 hover:text-red-700"><span class="material-symbols-outlined">cancel</span></button></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<td class="px-6 py-4">Ana Gómez</td>
+<td class="px-6 py-4">Dermatología</td>
+<td class="px-6 py-4">Oct 5, 2024 - 11:30 AM</td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pendiente</span></td>
+<td class="px-6 py-4 flex gap-2"><button class="text-green-500 hover:text-green-700"><span class="material-symbols-outlined">check_circle</span></button><button class="text-red-500 hover:text-red-700"><span class="material-symbols-outlined">cancel</span></button></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<td class="px-6 py-4">Luis Martínez</td>
+<td class="px-6 py-4">Oftalmología</td>
+<td class="px-6 py-4">Oct 5, 2024 - 12:00 PM</td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">Cancelado</span></td>
+<td class="px-6 py-4 flex gap-2"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+<!-- Professionals -->
+<div class="lg:col-span-2 bg-container-light dark:bg-container-dark p-6 rounded-xl shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-lg font-bold text-text-light dark:text-text-dark">Profesionales del centro</h2>
+<button class="flex items-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal hover:bg-primary/90">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Añadir médico</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-text-light dark:text-text-dark">
+<thead class="text-xs uppercase bg-background-light dark:bg-background-dark">
+<tr>
+<th class="px-6 py-3" scope="col">Nombre</th>
+<th class="px-6 py-3" scope="col">Especialidad</th>
+<th class="px-6 py-3" scope="col">Nº Colegiado</th>
+<th class="px-6 py-3" scope="col">Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<td class="px-6 py-4">Dr. Carlos Rivera</td>
+<td class="px-6 py-4">Cardiología</td>
+<td class="px-6 py-4">12345</td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Activo</span></td>
+</tr>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<td class="px-6 py-4">Dra. Sofía Vargas</td>
+<td class="px-6 py-4">Dermatología</td>
+<td class="px-6 py-4">67890</td>
+<td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">Inactivo</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Basic Reports -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl shadow-sm">
+<h2 class="text-lg font-bold text-text-light dark:text-text-dark mb-4">Reportes básicos</h2>
+<div class="space-y-4">
+<div>
+<p class="text-sm font-medium text-text-light dark:text-text-dark mb-2">Resumen de Citas</p>
+<div class="flex items-center gap-4">
+<div class="w-2/3 h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+<div class="h-2 bg-green-500 rounded-l-full" style="width: 65%"></div>
+<div class="h-2 bg-yellow-500" style="width: 15%; margin-left: 65%;"></div>
+<div class="h-2 bg-red-500 rounded-r-full" style="width: 20%; margin-left: 80%;"></div>
+</div>
+<div class="w-1/3 text-right">
+<p class="text-xs text-green-500">65% Atendidas</p>
+<p class="text-xs text-yellow-500">15% Pendientes</p>
+<p class="text-xs text-red-500">20% Canceladas</p>
+</div>
+</div>
+</div>
+<div class="text-center pt-4">
+<p class="text-sm text-text-light dark:text-text-dark">Tasa de ocupación semanal</p>
+<p class="text-3xl font-bold text-primary">78%</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="text-center p-4 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 bg-container-light dark:bg-container-dark">
+<a class="hover:underline" href="#">Política de privacidad</a> | 
+                <a class="hover:underline" href="#">Soporte</a> | 
+                <span>MIT © 2025</span>
+</footer>
+</div>
+</div>
+</body></html>

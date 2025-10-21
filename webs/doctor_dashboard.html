@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doctor Dashboard - Plataforma de Citas Médicas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0E7C7B",
+                        "background-light": "#F4F8F8",
+                        "background-dark": "#112121",
+                        "surface": "#FFFFFF",
+                        "text-dark": "#0e1b1b",
+                        "text-light-mode": "#0e1b1b",
+                        "text-dark-mode": "#f4f8f8",
+                        "border-light": "#d0e7e7",
+                        "border-dark": "#2a3f3f"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light-mode dark:text-text-dark-mode">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-surface dark:bg-background-dark flex flex-col border-r border-border-light dark:border-border-dark">
+<div class="p-6 flex items-center gap-3 border-b border-border-light dark:border-border-dark">
+<span class="material-symbols-outlined text-primary text-3xl">medical_services</span>
+<h1 class="text-lg font-bold text-text-dark dark:text-white">Plataforma de Citas</h1>
+</div>
+<div class="p-4 flex-grow">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Avatar of Dr. Ana Morales" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDs_RuksBEDN_3C0wBm2SVHjCZhyKDUQxWAFcHaxX36-J2eUM7ZYX9jkOP_EPTx1zvsYaosWJnMrrU5h7MSe7qeFnW1jTGeHOFiEvSP9Oig46N3aHgw3mlCOvrSiI9XRDJWhv3rXAsbYJrllpZT0C3429Mrml-gpqAJ56muwlA6UVX4q6vAOIaX-PthgTUk72HtYbiXKybWkVQFsijN9fyOABuOQLB7d_SI-VToU_02-SggLbcAenuoMz1Mz7prjy0lVFCc65UhZg0");'></div>
+<div>
+<h2 class="text-base font-medium text-text-dark dark:text-white">Dr. Ana Morales</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">General Physician</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Órdenes médicas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span>Citas de pacientes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#">
+<span class="material-symbols-outlined">domain_verification</span>
+<span>Disponibilidad de centros</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Perfil</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span>Soporte</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col">
+<!-- Header -->
+<header class="flex items-center justify-end px-8 py-4 bg-surface dark:bg-background-dark border-b border-border-light dark:border-border-dark">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-text-dark dark:text-gray-300">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-text-dark dark:text-gray-300">logout</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<!-- Welcome Card -->
+<div class="mb-8">
+<p class="text-3xl font-black text-text-dark dark:text-white tracking-tight">Buenos días, Dr. Morales</p>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Órdenes activas</p>
+<p class="text-4xl font-bold text-primary">12</p>
+</div>
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Citas pendientes</p>
+<p class="text-4xl font-bold text-primary">5</p>
+</div>
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Pacientes atendidos (semana)</p>
+<p class="text-4xl font-bold text-primary">34</p>
+</div>
+</div>
+<!-- Quick Link Button -->
+<div class="mb-8">
+<button class="flex min-w-[84px] items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Crear nueva orden médica</span>
+</button>
+</div>
+<!-- Medical Orders Table -->
+<div class="bg-surface dark:bg-gray-800 rounded-xl border border-border-light dark:border-border-dark overflow-hidden">
+<div class="p-6 border-b border-border-light dark:border-border-dark">
+<h3 class="text-xl font-bold text-text-dark dark:text-white">Órdenes Médicas Recientes</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50">
+<tr>
+<th class="px-6 py-3 font-medium">ID Orden</th>
+<th class="px-6 py-3 font-medium">Paciente</th>
+<th class="px-6 py-3 font-medium">Tipo de Prueba</th>
+<th class="px-6 py-3 font-medium">Fecha de Emisión</th>
+<th class="px-6 py-3 font-medium">Estado</th>
+<th class="px-6 py-3 font-medium text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-light dark:divide-border-dark">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">#ORD-001</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Carlos Ruiz</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Análisis de Sangre</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">2024-10-26</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pendiente</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<button class="text-primary hover:underline">Ver detalles</button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">#ORD-002</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Luisa Fernandez</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Radiografía de Tórax</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">2024-10-25</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Completada</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<button class="text-primary hover:underline">Ver detalles</button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">#ORD-003</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Javier Gomez</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">Resonancia Magnética</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">2024-10-24</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pendiente</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<button class="text-primary hover:underline">Ver detalles</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="px-8 py-4 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-border-light dark:border-border-dark">
+<p>Política de privacidad | Soporte | MIT © 2025</p>
+</footer>
+</div>
+</div>
+</body></html>

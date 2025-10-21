@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Healthcare Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0E7C7B",
+                        "accent": "#00B894",
+                        "background-light": "#F4F8F8",
+                        "background-dark": "#112121",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1A2E2E",
+                        "text-light": "#0e1b1b",
+                        "text-dark": "#f4f8f8",
+                        "border-light": "#d0e7e7",
+                        "border-dark": "#2a4242",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 w-full bg-card-light dark:bg-card-dark/80 backdrop-blur-sm border-b border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between h-20">
+<div class="flex items-center gap-4">
+<span class="text-2xl">🏥</span>
+<h1 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">Plataforma de Citas Médicas</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-accent text-white text-sm font-bold transition-colors hover:bg-accent/90">
+<span class="material-symbols-outlined">download</span>
+<span class="truncate">Exportar informe</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow container mx-auto px-4 py-8">
+<div class="flex flex-col gap-8">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<h2 class="text-3xl font-black tracking-tighter text-text-light dark:text-text-dark">Panel Analítico de Métricas del Sistema</h2>
+<div class="flex items-center gap-3">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4">
+<span class="material-symbols-outlined text-text-light dark:text-text-dark">calendar_today</span>
+<p class="text-sm font-medium">Este mes</p>
+<span class="material-symbols-outlined text-text-light dark:text-text-dark">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4">
+<span class="material-symbols-outlined text-text-light dark:text-text-dark">public</span>
+<p class="text-sm font-medium">Todas las regiones</p>
+<span class="material-symbols-outlined text-text-light dark:text-text-dark">expand_more</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Total de citas registradas</p>
+<p class="text-4xl font-bold tracking-tight text-primary">12,450</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Tiempo medio de espera</p>
+<p class="text-4xl font-bold tracking-tight text-primary">22 min</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Citas canceladas</p>
+<p class="text-4xl font-bold tracking-tight text-primary">8.5%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Tasa de ocupación general</p>
+<p class="text-4xl font-bold tracking-tight text-primary">92%</p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark lg:col-span-2">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Evolución de Citas Semanal</h3>
+<div class="h-64">
+<svg height="100%" preserveaspectratio="xMidYMid meet" viewbox="0 0 500 200" width="100%">
+<path d="M 0 150 C 50 150, 50 50, 100 50 C 150 50, 150 100, 200 100 C 250 100, 250 20, 300 20 C 350 20, 350 120, 400 120 C 450 120, 450 80, 500 80" fill="none" stroke="#0E7C7B" stroke-linecap="round" stroke-width="3"></path>
+<g class="dark:fill-gray-400 text-xs" fill="#4a5568">
+<text x="25" y="190">Sem 1</text>
+<text x="125" y="190">Sem 2</text>
+<text x="225" y="190">Sem 3</text>
+<text x="325" y="190">Sem 4</text>
+<text x="425" y="190">Sem 5</text>
+</g>
+</svg>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Distribución de Ocupación</h3>
+<div class="flex-grow flex items-center justify-center">
+<svg height="100%" viewbox="0 0 200 200" width="100%">
+<circle class="dark:stroke-gray-700" cx="100" cy="100" fill="none" r="80" stroke="#e2e8f0" stroke-width="20"></circle>
+<circle cx="100" cy="100" fill="none" r="80" stroke="#0E7C7B" stroke-dasharray="452.39" stroke-dashoffset="45.239" stroke-width="20" transform="rotate(-90 100 100)"></circle>
+<text class="text-4xl font-bold fill-primary dark:fill-primary" text-anchor="middle" x="100" y="105">92%</text>
+</svg>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark lg:col-span-2">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Citas por Tipo de Prueba</h3>
+<div class="h-64 flex items-end gap-6 px-4">
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-primary/20 rounded-t-md" style="height: 60%;"></div>
+<p class="text-xs font-medium text-text-light/70 dark:text-text-dark/70">Prueba A</p>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-primary/20 rounded-t-md" style="height: 30%;"></div>
+<p class="text-xs font-medium text-text-light/70 dark:text-text-dark/70">Prueba B</p>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-primary/20 rounded-t-md" style="height: 80%;"></div>
+<p class="text-xs font-medium text-text-light/70 dark:text-text-dark/70">Prueba C</p>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-primary/20 rounded-t-md" style="height: 50%;"></div>
+<p class="text-xs font-medium text-text-light/70 dark:text-text-dark/70">Prueba D</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Satisfacción Global</h3>
+<div class="flex-grow flex flex-col items-center justify-center gap-4">
+<div class="text-5xl font-bold text-accent flex items-center">
+<span class="material-symbols-outlined text-6xl text-yellow-400">star</span>
+                                4.3/5
+                            </div>
+<p class="text-center text-sm text-text-light/80 dark:text-text-dark/80">El tiempo de espera ha mejorado un <span class="font-bold text-accent">12%</span> este mes.</p>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark overflow-hidden">
+<div class="p-6">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Resumen por centro</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-background-light dark:bg-background-dark/50">
+<tr>
+<th class="px-6 py-3 font-bold" scope="col">Centro</th>
+<th class="px-6 py-3 font-bold" scope="col">Citas totales</th>
+<th class="px-6 py-3 font-bold" scope="col">Espera promedio</th>
+<th class="px-6 py-3 font-bold" scope="col">Cancelaciones</th>
+<th class="px-6 py-3 font-bold" scope="col">Ocupación</th>
+<th class="px-6 py-3" scope="col"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Hospital Central</td>
+<td class="px-6 py-4">4,120</td>
+<td class="px-6 py-4">18 min</td>
+<td class="px-6 py-4">6.2%</td>
+<td class="px-6 py-4">95%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Clínica del Sol</td>
+<td class="px-6 py-4">3,500</td>
+<td class="px-6 py-4">25 min</td>
+<td class="px-6 py-4">9.8%</td>
+<td class="px-6 py-4">90%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Centro Médico Norte</td>
+<td class="px-6 py-4">2,830</td>
+<td class="px-6 py-4">21 min</td>
+<td class="px-6 py-4">7.1%</td>
+<td class="px-6 py-4">88%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium">Sanatorio Sur</td>
+<td class="px-6 py-4">2,000</td>
+<td class="px-6 py-4">30 min</td>
+<td class="px-6 py-4">11.0%</td>
+<td class="px-6 py-4">93%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<footer class="w-full bg-card-light dark:bg-card-dark mt-12 border-t border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4 py-6 text-center text-sm text-text-light/60 dark:text-text-dark/60">
+<p>
+<a class="hover:text-primary" href="#">Política de privacidad</a> | 
+                    <a class="hover:text-primary" href="#">Soporte</a> | 
+                    MIT © 2025
+                </p>
+</div>
+</footer>
+</div>
+</body></html>
