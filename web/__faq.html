@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Centro de Ayuda y Preguntas Frecuentes - Plataforma de Citas Médicas"/>
+    <title>Ayuda y FAQ - Plataforma de Citas Médicas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet"/>
+    <link href="css/navigation.css" rel="stylesheet"/>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f4f8f8",
+                        "background-dark": "#112121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            
+            <!-- Header / Navbar (insertado dinámicamente) -->
+            
+            <!-- Main Content -->
+            <main class="flex-1">
+                <div class="mx-auto max-w-4xl py-12 px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Header -->
+                    <div class="text-center mb-12">
+                        <span class="material-symbols-outlined text-primary text-6xl mb-4">help_center</span>
+                        <h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-[#0e1b1b] dark:text-white min-w-72 mb-4">
+                            Centro de Ayuda y Preguntas Frecuentes
+                        </h1>
+                        <p class="text-base text-[#4d9997] dark:text-gray-400">
+                            Encuentra respuestas rápidas a las preguntas más comunes
+                        </p>
+                        <div class="flex gap-4 justify-center mt-6">
+                            <a href="#contacto" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors">
+                                <span class="material-symbols-outlined">mail</span>
+                                Contactar Soporte
+                            </a>
+                            <a href="tel:+34900123456" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                                <span class="material-symbols-outlined">call</span>
+                                900 123 456
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="mb-12">
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">
+                                search
+                            </span>
+                            <input 
+                                id="faq-search"
+                                class="form-input w-full rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-14 pl-12 pr-4 text-[#0e1b1b] dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-primary focus:ring-primary" 
+                                placeholder="¿En qué podemos ayudarte?" 
+                                type="search"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Popular FAQs -->
+                    <div class="mb-16">
+                        <h2 class="text-2xl font-bold leading-tight tracking-[-0.015em] text-[#0e1b1b] dark:text-white mb-6">
+                            Preguntas Frecuentes Populares
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="faq-item flex items-center justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="window.scrollTo({top: document.getElementById('citas-section').offsetTop - 100, behavior: 'smooth'})">
+                                <div class="flex items-center gap-4">
+                                    <div class="text-primary flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-10">
+                                        <span class="material-symbols-outlined">help_outline</span>
+                                    </div>
+                                    <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal flex-1">
+                                        ¿Cómo reservo una cita?
+                                    </p>
+                                </div>
+                                <div class="shrink-0">
+                                    <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+                                </div>
+                            </div>
+
+                            <div class="faq-item flex items-center justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="window.scrollTo({top: document.getElementById('citas-section').offsetTop - 100, behavior: 'smooth'})">
+                                <div class="flex items-center gap-4">
+                                    <div class="text-primary flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-10">
+                                        <span class="material-symbols-outlined">help_outline</span>
+                                    </div>
+                                    <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal flex-1">
+                                        ¿Puedo cancelar una cita reservada?
+                                    </p>
+                                </div>
+                                <div class="shrink-0">
+                                    <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+                                </div>
+                            </div>
+
+                            <div class="faq-item flex items-center justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="window.scrollTo({top: document.getElementById('perfil-section').offsetTop - 100, behavior: 'smooth'})">
+                                <div class="flex items-center gap-4">
+                                    <div class="text-primary flex items-center justify-center rounded-lg bg-primary/20 shrink-0 size-10">
+                                        <span class="material-symbols-outlined">help_outline</span>
+                                    </div>
+                                    <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal flex-1">
+                                        ¿Cómo actualizo los datos de mi perfil?
+                                    </p>
+                                </div>
+                                <div class="shrink-0">
+                                    <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div>
+                        <h2 class="text-2xl font-bold leading-tight tracking-[-0.015em] text-[#0e1b1b] dark:text-white mb-6">
+                            Explorar por Categoría
+                        </h2>
+                        <div class="space-y-4">
+                            
+                            <!-- Category 1: Gestión de Citas -->
+                            <details id="citas-section" class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                <summary class="flex cursor-pointer list-none items-center justify-between p-4 font-medium text-[#0e1b1b] dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <span class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">event</span>
+                                        Gestión de Citas
+                                    </span>
+                                    <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-90">chevron_right</span>
+                                </summary>
+                                <div class="border-t border-gray-200 dark:border-gray-700 p-4 text-gray-600 dark:text-gray-300 space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Cómo reservo una cita?</h3>
+                                        <p>Para reservar una cita, haz clic en el botón "Nueva Cita" en tu dashboard. Selecciona la especialidad, el profesional y el horario que mejor se adapte a tus necesidades. Recibirás una confirmación por email.</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Puedo cancelar o reprogramar una cita?</h3>
+                                        <p>Sí, puedes cancelar o reprogramar tu cita desde el panel "Mis Citas". Te recomendamos hacerlo con al menos 24 horas de antelación para evitar penalizaciones.</p>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- Category 2: Registro y Acceso -->
+                            <details class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                <summary class="flex cursor-pointer list-none items-center justify-between p-4 font-medium text-[#0e1b1b] dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <span class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">login</span>
+                                        Registro y Acceso
+                                    </span>
+                                    <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-90">chevron_right</span>
+                                </summary>
+                                <div class="border-t border-gray-200 dark:border-gray-700 p-4 text-gray-600 dark:text-gray-300 space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Cómo me registro en la plataforma?</h3>
+                                        <p>Para registrarte, haz clic en "Registrarse" en la página de inicio y sigue las instrucciones. Necesitarás una dirección de correo electrónico válida y tu número de tarjeta sanitaria.</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Olvidé mi contraseña, qué hago?</h3>
+                                        <p>Haz clic en "¿Olvidaste tu contraseña?" en la página de inicio de sesión. Recibirás un enlace por correo para restablecer tu contraseña.</p>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- Category 3: Perfil y Configuración -->
+                            <details id="perfil-section" class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                <summary class="flex cursor-pointer list-none items-center justify-between p-4 font-medium text-[#0e1b1b] dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <span class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">person</span>
+                                        Perfil y Configuración
+                                    </span>
+                                    <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-90">chevron_right</span>
+                                </summary>
+                                <div class="border-t border-gray-200 dark:border-gray-700 p-4 text-gray-600 dark:text-gray-300 space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Cómo actualizo mi información personal?</h3>
+                                        <p>Accede a la sección "Mi Perfil" en tu dashboard para actualizar tus datos personales, dirección, teléfono y preferencias de notificación.</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Cómo cambio mi tarjeta sanitaria?</h3>
+                                        <p>Puedes actualizar tu número de tarjeta sanitaria desde la sección 'Perfil' en tu dashboard, bajo 'Información Personal'. Si tienes problemas, contacta con soporte.</p>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- Category 4: Profesionales -->
+                            <details class="group bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                                <summary class="flex cursor-pointer list-none items-center justify-between p-4 font-medium text-[#0e1b1b] dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <span class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">medical_services</span>
+                                        Uso para Profesionales
+                                    </span>
+                                    <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-90">chevron_right</span>
+                                </summary>
+                                <div class="border-t border-gray-200 dark:border-gray-700 p-4 text-gray-600 dark:text-gray-300 space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Cómo gestiono mi agenda como profesional?</h3>
+                                        <p>Los profesionales médicos pueden gestionar su agenda, ver historiales de pacientes y configurar sus horarios de consulta desde el panel de control para profesionales.</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-[#0e1b1b] dark:text-white mb-2">¿Puedo bloquear horarios específicos?</h3>
+                                        <p>Sí, desde tu dashboard de profesional puedes configurar tu disponibilidad y bloquear horarios específicos para vacaciones, formación o asuntos personales.</p>
+                                    </div>
+                                </div>
+                            </details>
+
+                        </div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div id="contacto" class="mt-20 bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 p-8 rounded-xl">
+                        <div class="max-w-3xl mx-auto">
+                            <div class="text-center mb-8">
+                                <h3 class="text-3xl font-bold text-[#0e1b1b] dark:text-white mb-2">¿No encuentras lo que buscas?</h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    Nuestro equipo de soporte está aquí para ayudarte. Envíanos tu consulta y te responderemos en menos de 24 horas.
+                                </p>
+                            </div>
+
+                            <!-- Formulario de Contacto -->
+                            <form id="contact-form" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2" for="contact-name">Nombre completo *</label>
+                                        <input 
+                                            type="text" 
+                                            id="contact-name"
+                                            required
+                                            class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                            placeholder="Juan Pérez"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2" for="contact-email">Correo electrónico *</label>
+                                        <input 
+                                            type="email" 
+                                            id="contact-email"
+                                            required
+                                            class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                            placeholder="tu@email.com"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="contact-phone">Teléfono (opcional)</label>
+                                    <input 
+                                        type="tel" 
+                                        id="contact-phone"
+                                        class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                        placeholder="+34 600 123 456"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="contact-subject">Asunto *</label>
+                                    <select 
+                                        id="contact-subject"
+                                        required
+                                        class="form-select w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                    >
+                                        <option value="">Selecciona un tema</option>
+                                        <option value="cita">Consulta sobre citas</option>
+                                        <option value="cuenta">Problema con mi cuenta</option>
+                                        <option value="pago">Consulta sobre pagos</option>
+                                        <option value="tecnico">Problema técnico</option>
+                                        <option value="sugerencia">Sugerencia</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium mb-2" for="contact-message">Mensaje *</label>
+                                    <textarea 
+                                        id="contact-message"
+                                        required
+                                        rows="5"
+                                        class="form-textarea w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                        placeholder="Describe tu consulta o problema..."
+                                    ></textarea>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Mínimo 20 caracteres</p>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <input 
+                                        type="checkbox" 
+                                        id="contact-privacy"
+                                        required
+                                        class="h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary mt-0.5"
+                                    />
+                                    <label class="ml-3 text-sm text-gray-600 dark:text-gray-300" for="contact-privacy">
+                                        He leído y acepto la <a href="privacy_policy.html" class="text-primary hover:underline">política de privacidad</a> y el tratamiento de mis datos personales.
+                                    </label>
+                                </div>
+
+                                <button 
+                                    type="submit"
+                                    class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors shadow-md"
+                                >
+                                    <span class="material-symbols-outlined">send</span>
+                                    Enviar Consulta
+                                </button>
+                            </form>
+
+                            <!-- Contacto Alternativo -->
+                            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
+                                    <span class="material-symbols-outlined text-primary text-3xl mb-2">mail</span>
+                                    <p class="font-bold">Email</p>
+                                    <a href="mailto:soporte@citasmedicas.es" class="text-sm text-primary hover:underline">soporte@citasmedicas.es</a>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
+                                    <span class="material-symbols-outlined text-primary text-3xl mb-2">call</span>
+                                    <p class="font-bold">Teléfono</p>
+                                    <a href="tel:+34900123456" class="text-sm text-primary hover:underline">+34 900 123 456</a>
+                                    <p class="text-xs text-gray-500 mt-1">L-V 9:00 - 18:00</p>
+                                </div>
+                                <div class="bg-white dark:bg-gray-800 p-4 rounded-lg text-center">
+                                    <span class="material-symbols-outlined text-primary text-3xl mb-2">schedule</span>
+                                    <p class="font-bold">Horario</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">Lunes a Viernes</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">9:00 - 18:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+            
+            <!-- Footer (insertado dinámicamente) -->
+            
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation-config.js"></script>
+    <script src="js/navigation-enhanced.js"></script>
+    
+    <script>
+        // Search functionality
+        document.getElementById('faq-search').addEventListener('input', function() {
+            const search = this.value.toLowerCase();
+            const items = document.querySelectorAll('details');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(search)) {
+                    item.style.display = 'block';
+                    if (search.length > 2) {
+                        item.setAttribute('open', '');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // If search is empty, show all and close all
+            if (search.length === 0) {
+                items.forEach(item => {
+                    item.style.display = 'block';
+                    item.removeAttribute('open');
+                });
+            }
+        });
+
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate fields
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const subject = document.getElementById('contact-subject').value;
+            const message = document.getElementById('contact-message').value.trim();
+            const privacy = document.getElementById('contact-privacy').checked;
+            
+            if (!name || !email || !subject || !message || !privacy) {
+                showErrorMessage('Por favor, completa todos los campos obligatorios');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showErrorMessage('Por favor, introduce un correo electrónico válido');
+                return;
+            }
+            
+            if (message.length < 20) {
+                showErrorMessage('El mensaje debe tener al menos 20 caracteres');
+                return;
+            }
+            
+            // Simulate sending
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Enviando...';
+            
+            setTimeout(() => {
+                showSuccessMessage('¡Consulta enviada! Te responderemos en menos de 24 horas.');
+                this.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Enviar Consulta';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

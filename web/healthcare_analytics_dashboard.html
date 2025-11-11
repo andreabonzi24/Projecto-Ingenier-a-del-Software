@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Healthcare Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0E7C7B",
+                        "accent": "#00B894",
+                        "background-light": "#F4F8F8",
+                        "background-dark": "#112121",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1A2E2E",
+                        "text-light": "#0e1b1b",
+                        "text-dark": "#f4f8f8",
+                        "border-light": "#d0e7e7",
+                        "border-dark": "#2a4242",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 w-full bg-card-light dark:bg-card-dark/80 backdrop-blur-sm border-b border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between h-20">
+<div class="flex items-center gap-4">
+<span class="text-2xl">🏥</span>
+<h1 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">Plataforma de Citas Médicas</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-accent text-white text-sm font-bold transition-colors hover:bg-accent/90">
+<span class="material-symbols-outlined">download</span>
+<span class="truncate">Exportar informe</span>
+</button>
+<button id="logoutBtn" class="logout-button flex items-center justify-center h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="Cerrar sesión">
+<span class="material-symbols-outlined text-red-600 dark:text-red-400">logout</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow container mx-auto px-4 py-8">
+<div class="flex flex-col gap-8">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex flex-col gap-2">
+                        <h2 class="text-3xl font-black tracking-tighter text-text-light dark:text-text-dark">Panel Analítico de Métricas del Sistema</h2>
+                        <p class="text-sm text-text-light/70 dark:text-text-dark/70">Visualiza las métricas del sistema con filtros interactivos</p>
+                    </div>
+                    <!-- MEJORA: Filtros funcionales -->
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <input type="date" id="date-filter" class="h-10 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4 text-sm" onchange="applyFilters()"/>
+                        <select id="center-filter" onchange="applyFilters()" class="h-10 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4 text-sm">
+                            <option value="all">Todos los centros</option>
+                            <option value="hospital-central">Hospital Central</option>
+                            <option value="clinica-sol">Clínica del Sol</option>
+                            <option value="centro-norte">Centro Médico Norte</option>
+                            <option value="sanatorio-sur">Sanatorio Sur</option>
+                        </select>
+                        <select id="specialty-filter" onchange="applyFilters()" class="h-10 rounded-lg bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark px-4 text-sm">
+                            <option value="all">Todas las especialidades</option>
+                            <option value="cardiologia">Cardiología</option>
+                            <option value="dermatologia">Dermatología</option>
+                            <option value="pediatria">Pediatría</option>
+                            <option value="neurologia">Neurología</option>
+                        </select>
+                        <button onclick="applyFilters()" class="flex h-10 items-center gap-2 px-4 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors">
+                            <span class="material-symbols-outlined">filter_alt</span>
+                            <span>Aplicar</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Última actualización -->
+                <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    <span class="material-symbols-outlined text-base">schedule</span>
+                    <span>Última actualización: <span id="last-updated"></span></span>
+                </div>
+                
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Total de citas registradas</p>
+<p class="text-4xl font-bold tracking-tight text-primary">12,450</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Tiempo medio de espera</p>
+<p class="text-4xl font-bold tracking-tight text-primary">22 min</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Citas canceladas</p>
+<p class="text-4xl font-bold tracking-tight text-primary">8.5%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<p class="text-base font-medium text-text-light/80 dark:text-text-dark/80">Tasa de ocupación general</p>
+<p class="text-4xl font-bold tracking-tight text-primary">92%</p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+<!-- MEJORA: Gráfico de líneas interactivo con Chart.js -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark lg:col-span-2">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Evolución de Citas Semanal</h3>
+<div class="h-64">
+<canvas id="appointmentsChart"></canvas>
+</div>
+</div>
+<!-- MEJORA: Gráfico circular interactivo con Chart.js -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Distribución de Ocupación</h3>
+<div class="flex-grow flex items-center justify-center h-64">
+<canvas id="occupancyChart"></canvas>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+<!-- MEJORA: Gráfico de barras interactivo con Chart.js -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark lg:col-span-2">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Citas por Especialidad</h3>
+<div class="h-64">
+<canvas id="specialtyChart"></canvas>
+</div>
+</div>
+<!-- Satisfacción con animación -->
+<div class="flex flex-col gap-4 rounded-xl bg-card-light dark:bg-card-dark p-6 border border-border-light dark:border-border-dark">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Satisfacción Global</h3>
+<div class="flex-grow flex flex-col items-center justify-center gap-4">
+<div class="text-5xl font-bold text-accent flex items-center">
+<span class="material-symbols-outlined text-6xl text-yellow-400">star</span>
+<span id="satisfaction-score">4.3</span>/5
+</div>
+<p class="text-center text-sm text-text-light/80 dark:text-text-dark/80">El tiempo de espera ha mejorado un <span class="font-bold text-accent">12%</span> este mes.</p>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark overflow-hidden">
+<div class="p-6">
+<h3 class="text-lg font-bold text-text-light dark:text-text-dark">Resumen por centro</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-background-light dark:bg-background-dark/50">
+<tr>
+<th class="px-6 py-3 font-bold" scope="col">Centro</th>
+<th class="px-6 py-3 font-bold" scope="col">Citas totales</th>
+<th class="px-6 py-3 font-bold" scope="col">Espera promedio</th>
+<th class="px-6 py-3 font-bold" scope="col">Cancelaciones</th>
+<th class="px-6 py-3 font-bold" scope="col">Ocupación</th>
+<th class="px-6 py-3" scope="col"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Hospital Central</td>
+<td class="px-6 py-4">4,120</td>
+<td class="px-6 py-4">18 min</td>
+<td class="px-6 py-4">6.2%</td>
+<td class="px-6 py-4">95%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Clínica del Sol</td>
+<td class="px-6 py-4">3,500</td>
+<td class="px-6 py-4">25 min</td>
+<td class="px-6 py-4">9.8%</td>
+<td class="px-6 py-4">90%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr class="border-b border-border-light dark:border-border-dark">
+<td class="px-6 py-4 font-medium">Centro Médico Norte</td>
+<td class="px-6 py-4">2,830</td>
+<td class="px-6 py-4">21 min</td>
+<td class="px-6 py-4">7.1%</td>
+<td class="px-6 py-4">88%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium">Sanatorio Sur</td>
+<td class="px-6 py-4">2,000</td>
+<td class="px-6 py-4">30 min</td>
+<td class="px-6 py-4">11.0%</td>
+<td class="px-6 py-4">93%</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Ver detalle</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<footer class="w-full bg-card-light dark:bg-card-dark mt-12 border-t border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4 py-6 text-center text-sm text-text-light/60 dark:text-text-dark/60">
+<p>
+<a class="hover:text-primary" href="#">Política de privacidad</a> | 
+                    <a class="hover:text-primary" href="#">Soporte</a> | 
+                    MIT © 2025
+                </p>
+</div>
+</footer>
+</div>
+
+<!-- ========================================
+     MEJORA: JavaScript para gráficos interactivos con Chart.js
+     ======================================== -->
+<script>
+    // Configuración global de Chart.js
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#6b7280';
+    
+    // Variables para almacenar las instancias de los gráficos
+    let appointmentsChart, occupancyChart, specialtyChart;
+    
+    // Datos simulados (se actualizarían con filtros)
+    const appointmentsData = {
+        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5'],
+        datasets: [{
+            label: 'Citas',
+            data: [850, 920, 780, 1100, 950],
+            borderColor: '#0E7C7B',
+            backgroundColor: 'rgba(14, 124, 123, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    };
+    
+    const specialtyData = {
+        labels: ['Cardiología', 'Dermatología', 'Pediatría', 'Neurología', 'Ginecología', 'Odontología'],
+        datasets: [{
+            label: 'Citas por especialidad',
+            data: [850, 650, 920, 480, 720, 610],
+            backgroundColor: [
+                '#0E7C7B',
+                '#00B894',
+                '#6C5CE7',
+                '#FD79A8',
+                '#FDCB6E',
+                '#74B9FF'
+            ],
+            borderWidth: 0
+        }]
+    };
+    
+    // Función para inicializar los gráficos
+    function initCharts() {
+        // Gráfico de evolución de citas (línea)
+        const ctxAppointments = document.getElementById('appointmentsChart').getContext('2d');
+        appointmentsChart = new Chart(ctxAppointments, {
+            type: 'line',
+            data: appointmentsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Citas: ' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Gráfico de ocupación (doughnut)
+        const ctxOccupancy = document.getElementById('occupancyChart').getContext('2d');
+        occupancyChart = new Chart(ctxOccupancy, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ocupado', 'Disponible'],
+                datasets: [{
+                    data: [92, 8],
+                    backgroundColor: ['#0E7C7B', '#e2e8f0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+        
+        // Gráfico de citas por especialidad (barras)
+        const ctxSpecialty = document.getElementById('specialtyChart').getContext('2d');
+        specialtyChart = new Chart(ctxSpecialty, {
+            type: 'bar',
+            data: specialtyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Citas: ' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Función para aplicar filtros y actualizar gráficos
+    function applyFilters() {
+        const date = document.getElementById('date-filter').value;
+        const center = document.getElementById('center-filter').value;
+        const specialty = document.getElementById('specialty-filter').value;
+        
+        // Simular actualización de datos basándose en filtros
+        // En producción, esto haría una llamada a la API
+        const randomFactor = () => 0.8 + Math.random() * 0.4;
+        
+        // Actualizar datos de citas
+        appointmentsChart.data.datasets[0].data = appointmentsData.datasets[0].data.map(v => Math.round(v * randomFactor()));
+        appointmentsChart.update('active');
+        
+        // Actualizar datos de especialidades
+        specialtyChart.data.datasets[0].data = specialtyData.datasets[0].data.map(v => Math.round(v * randomFactor()));
+        specialtyChart.update('active');
+        
+        // Actualizar ocupación
+        const newOccupancy = 80 + Math.round(Math.random() * 15);
+        occupancyChart.data.datasets[0].data = [newOccupancy, 100 - newOccupancy];
+        occupancyChart.update('active');
+        
+        // Actualizar timestamp
+        updateLastUpdated();
+        
+        // Mostrar notificación
+        console.log('Filtros aplicados:', { date, center, specialty });
+    }
+    
+    // Actualizar timestamp
+    function updateLastUpdated() {
+        const now = new Date();
+        document.getElementById('last-updated').textContent = now.toLocaleTimeString('es-ES');
+    }
+    
+    // Animar contador de satisfacción
+    function animateSatisfaction() {
+        const element = document.getElementById('satisfaction-score');
+        const target = 4.3;
+        let current = 0;
+        const increment = target / 30;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = current.toFixed(1);
+        }, 30);
+    }
+    
+    // Inicializar al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        initCharts();
+        updateLastUpdated();
+        animateSatisfaction();
+        
+        // Actualizar timestamp cada minuto
+        setInterval(updateLastUpdated, 60000);
+        
+        // Establecer fecha por defecto (hoy)
+        document.getElementById('date-filter').valueAsDate = new Date();
+    });
+</script>
+
+<!-- 🔒 PROTECCIÓN JWT -->
+<script src="js/api.js"></script>
+
+<!-- ✅ Navigation Module con función logout centralizada -->
+<script src="js/navigation.js"></script>
+
+<script>
+    // CRÍTICO: Proteger acceso - Solo administradores del sistema
+    protectPage('admin_sistema');
+</script>
+</body></html>

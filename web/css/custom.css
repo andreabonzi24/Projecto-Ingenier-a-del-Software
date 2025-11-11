@@ -1,0 +1,379 @@
+/**
+ * custom.css - Estilos personalizados para la Plataforma de Citas Médicas
+ * Incluye animaciones, transiciones y estilos específicos
+ */
+
+/* ==============================================
+   VARIABLES CSS PERSONALIZADAS
+   ============================================== */
+:root {
+    --primary: #0c7e7c;
+    --primary-hover: #0a6866;
+    --background-light: #f4f8f8;
+    --background-dark: #112121;
+    --transition-speed: 0.3s;
+}
+
+/* ==============================================
+   ANIMACIONES
+   ============================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn var(--transition-speed) ease-out;
+}
+
+.animate-fade-out {
+    animation: fadeOut var(--transition-speed) ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==============================================
+   ESTILOS GENERALES
+   ============================================== */
+
+/* Suavizar scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ==============================================
+   ESTILOS DE FORMULARIOS
+   ============================================== */
+
+/* Input focus mejorado */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(12, 126, 124, 0.1);
+}
+
+/* Mensajes de error */
+.error-message {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Input con error */
+input.border-red-500,
+textarea.border-red-500,
+select.border-red-500 {
+    border-color: #ef4444 !important;
+}
+
+/* Placeholder mejorado */
+::placeholder {
+    opacity: 0.6;
+}
+
+/* ==============================================
+   ESTILOS DE BOTONES
+   ============================================== */
+
+button {
+    transition: all var(--transition-speed) ease;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==============================================
+   ESTILOS DE TARJETAS
+   ============================================== */
+
+.card-hover {
+    transition: all var(--transition-speed) ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(12, 126, 124, 0.1);
+}
+
+/* ==============================================
+   ESTILOS DE NAVEGACIÓN
+   ============================================== */
+
+/* Navbar sticky con backdrop blur */
+header.sticky {
+    backdrop-filter: blur(10px);
+    background-color: rgba(244, 248, 248, 0.8);
+}
+
+.dark header.sticky {
+    background-color: rgba(17, 33, 33, 0.8);
+}
+
+/* Animación del menú móvil */
+#mobile-menu {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* ==============================================
+   ESTILOS DE NOTIFICACIONES
+   ============================================== */
+
+/* Punto de notificación */
+.notification-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.dark .notification-dot {
+    border-color: #112121;
+}
+
+/* ==============================================
+   ESTILOS DE LOADING
+   ============================================== */
+
+.loading-spinner {
+    border: 3px solid rgba(12, 126, 124, 0.1);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==============================================
+   ESTILOS DE MODAL
+   ============================================== */
+
+.modal-backdrop {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ==============================================
+   ESTILOS DE TABLAS
+   ============================================== */
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table thead tr th {
+    position: sticky;
+    top: 0;
+    background-color: inherit;
+    z-index: 10;
+}
+
+/* ==============================================
+   ESTILOS RESPONSIVE
+   ============================================== */
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .mobile-full-width {
+        width: 100%;
+    }
+    
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+}
+
+/* ==============================================
+   UTILIDADES PERSONALIZADAS
+   ============================================== */
+
+/* Texto con gradiente */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, #00b894 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Sombra suave */
+.soft-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Sombra media */
+.medium-shadow {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Sombra fuerte */
+.strong-shadow {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Border con gradiente */
+.border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white), 
+                linear-gradient(135deg, var(--primary), #00b894);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+
+.dark .border-gradient {
+    background: linear-gradient(#112121, #112121), 
+                linear-gradient(135deg, var(--primary), #00b894);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+}
+
+/* ==============================================
+   ACCESIBILIDAD
+   ============================================== */
+
+/* Focus visible para navegación por teclado */
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Skip to main content */
+.skip-to-main {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1em;
+    background-color: var(--primary);
+    color: white;
+    text-decoration: none;
+}
+
+.skip-to-main:focus {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 1em;
+}
+
+/* Reducir movimiento para usuarios con preferencia */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==============================================
+   DARK MODE ESPECÍFICO
+   ============================================== */
+
+/* Ajustes de contraste para dark mode */
+.dark {
+    color-scheme: dark;
+}
+
+.dark img {
+    opacity: 0.9;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+    color-scheme: dark;
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+    header,
+    footer,
+    nav,
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+}

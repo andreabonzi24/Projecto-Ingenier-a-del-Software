@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Pago de Cita Médica - Plataforma de Citas Médicas"/>
+    <title>Pago de Cita - Plataforma de Citas Médicas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet"/>
+    <link href="css/navigation.css" rel="stylesheet"/>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f4f8f8",
+                        "background-dark": "#112121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            
+            <!-- Header / Navbar (insertado dinámicamente) -->
+            
+            <!-- Main Content -->
+            <main class="flex flex-1 justify-center px-4 sm:px-6 lg:px-8 py-8">
+                <div class="layout-content-container flex flex-col max-w-[1000px] flex-1">
+                    
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-[#0e1b1b] dark:text-white mb-2">
+                            Pago de Cita Médica
+                        </h1>
+                        <p class="text-base text-[#4d9997] dark:text-gray-400">
+                            Complete el pago para confirmar su reserva
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Payment Form -->
+                        <div class="lg:col-span-2 space-y-6">
+                            
+                            <!-- Payment Method Selection -->
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <h2 class="text-xl font-bold mb-4">Método de Pago</h2>
+                                
+                                <div class="space-y-3">
+                                    <!-- Credit Card -->
+                                    <label class="payment-method flex items-center gap-4 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="payment_method" value="card" class="w-5 h-5 text-primary" checked onchange="switchPaymentMethod('card')"/>
+                                        <span class="material-symbols-outlined text-2xl text-primary">credit_card</span>
+                                        <div class="flex-1">
+                                            <p class="font-bold">Tarjeta de Crédito/Débito</p>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Visa, Mastercard, American Express</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- PayPal -->
+                                    <label class="payment-method flex items-center gap-4 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="payment_method" value="paypal" class="w-5 h-5 text-primary" onchange="switchPaymentMethod('paypal')"/>
+                                        <span class="material-symbols-outlined text-2xl text-blue-500">account_balance_wallet</span>
+                                        <div class="flex-1">
+                                            <p class="font-bold">PayPal</p>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Pago seguro con tu cuenta PayPal</p>
+                                        </div>
+                                    </label>
+
+                                    <!-- Bank Transfer -->
+                                    <label class="payment-method flex items-center gap-4 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                                        <input type="radio" name="payment_method" value="transfer" class="w-5 h-5 text-primary" onchange="switchPaymentMethod('transfer')"/>
+                                        <span class="material-symbols-outlined text-2xl text-green-500">account_balance</span>
+                                        <div class="flex-1">
+                                            <p class="font-bold">Transferencia Bancaria</p>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Pago mediante transferencia bancaria</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Credit Card Form -->
+                            <div id="card-form" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-bold mb-4">Datos de la Tarjeta</h3>
+                                <form id="payment-form" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Número de tarjeta</label>
+                                        <input 
+                                            type="text" 
+                                            id="card-number"
+                                            placeholder="1234 5678 9012 3456"
+                                            maxlength="19"
+                                            class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                        />
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium mb-2">Fecha de expiración</label>
+                                            <input 
+                                                type="text" 
+                                                id="card-expiry"
+                                                placeholder="MM/AA"
+                                                maxlength="5"
+                                                class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-2">CVV</label>
+                                            <input 
+                                                type="text" 
+                                                id="card-cvv"
+                                                placeholder="123"
+                                                maxlength="4"
+                                                class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Nombre del titular</label>
+                                        <input 
+                                            type="text" 
+                                            id="card-holder"
+                                            placeholder="JUAN PÉREZ"
+                                            class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary uppercase"
+                                        />
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- PayPal Form -->
+                            <div id="paypal-form" class="hidden bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-bold mb-4">Datos de PayPal</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Correo electrónico de PayPal</label>
+                                        <input 
+                                            type="email" 
+                                            id="paypal-email"
+                                            placeholder="tu.email@example.com"
+                                            class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                            required
+                                        />
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                            Ingresa el correo asociado a tu cuenta de PayPal
+                                        </p>
+                                    </div>
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg flex items-start gap-3">
+                                        <span class="material-symbols-outlined text-blue-500">info</span>
+                                        <p class="text-sm text-blue-800 dark:text-blue-200">
+                                            Serás redirigido a PayPal para completar el pago de forma segura.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bank Transfer Info -->
+                            <div id="transfer-form" class="hidden bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-bold mb-4">Información para Transferencia</h3>
+                                <div class="space-y-4">
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                                        <div class="flex items-start gap-3 mb-4">
+                                            <span class="material-symbols-outlined text-yellow-600">warning</span>
+                                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                                Realiza la transferencia bancaria con los siguientes datos. Tu cita se confirmará al recibir el pago.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-3 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">Banco:</span>
+                                            <span class="font-bold">Banco Santander</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">Titular:</span>
+                                            <span class="font-bold">Plataforma de Citas Médicas S.L.</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">IBAN:</span>
+                                            <span class="font-bold font-mono">ES91 0049 1500 0512 3456 7890</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">BIC/SWIFT:</span>
+                                            <span class="font-bold font-mono">BSCHESMM</span>
+                                        </div>
+                                        <div class="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium">Concepto:</span>
+                                                <span id="transfer-reference" class="font-bold text-primary">CITA-20251030-001</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                * Es importante incluir este concepto en la transferencia
+                                            </p>
+                                        </div>
+                                        <div class="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-600">
+                                            <span class="font-medium text-lg">Importe:</span>
+                                            <span id="transfer-amount" class="font-bold text-2xl text-primary">45,00 €</span>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="copyTransferInfo()" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                                        <span class="material-symbols-outlined">content_copy</span>
+                                        Copiar información de transferencia
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- NUEVO: Sistema de Puntos de Fidelización -->
+                            <div class="bg-gradient-to-r from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-xl border-2 border-primary/30 p-6 mb-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary text-3xl">stars</span>
+                                        <div>
+                                            <h3 class="text-lg font-bold">Usa tus Puntos de Recompensa</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Cada 100 puntos = 5€ de descuento</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Puntos disponibles</p>
+                                        <p class="text-2xl font-black text-primary" id="available-points">120</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2">
+                                    <input 
+                                        type="number" 
+                                        id="points-to-use"
+                                        min="0"
+                                        max="120"
+                                        step="10"
+                                        placeholder="Puntos a usar (máx. 120)"
+                                        class="form-input flex-1 rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary"
+                                    />
+                                    <button 
+                                        onclick="applyPointsDiscount()" 
+                                        class="px-6 py-2 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors whitespace-nowrap"
+                                    >
+                                        Canjear
+                                    </button>
+                                </div>
+                                
+                                <!-- Mensaje de puntos -->
+                                <div id="points-message" class="mt-3 hidden">
+                                    <div class="flex items-center gap-2 p-3 rounded-lg bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                        <span id="points-text" class="text-sm font-medium"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MEJORA: Sistema de Códigos de Descuento -->
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <h3 class="text-lg font-bold mb-4">Código de Descuento</h3>
+                                <div class="flex gap-2">
+                                    <input 
+                                        type="text" 
+                                        id="discountCode"
+                                        placeholder="Introduce tu código de descuento"
+                                        class="form-input flex-1 rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary focus:border-primary uppercase"
+                                    />
+                                    <button 
+                                        onclick="applyDiscount()" 
+                                        class="px-6 py-2 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors whitespace-nowrap"
+                                    >
+                                        Aplicar
+                                    </button>
+                                </div>
+                                <!-- Mensaje de validación -->
+                                <div id="discount-message" class="mt-3 hidden">
+                                    <div class="flex items-center gap-2 p-3 rounded-lg" id="discount-message-container">
+                                        <span class="material-symbols-outlined" id="discount-icon"></span>
+                                        <span id="discount-text" class="text-sm font-medium"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Button -->
+                            <button id="submit-payment" onclick="processPayment()" class="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-primary text-white text-lg font-bold hover:bg-primary/90 transition-colors shadow-md">
+                                <span class="material-symbols-outlined">lock</span>
+                                <span id="payment-button-text">Pagar 48,40 €</span>
+                            </button>
+
+                            <p class="text-xs text-center text-gray-500 dark:text-gray-400">
+                                <span class="material-symbols-outlined text-sm align-middle">verified_user</span>
+                                Pago seguro protegido con encriptación SSL de 256 bits
+                            </p>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 sticky top-20">
+                                <h2 class="text-xl font-bold mb-4">Resumen del Pedido</h2>
+                                
+                                <div class="space-y-4 mb-6">
+                                    <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Servicio</p>
+                                        <p class="font-bold">Consulta Médica - Cardiología</p>
+                                    </div>
+                                    
+                                    <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Profesional</p>
+                                        <p class="font-bold">Dr. Ana Torres</p>
+                                    </div>
+                                    
+                                    <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Centro</p>
+                                        <p class="font-bold">Hospital Universitario</p>
+                                    </div>
+                                    
+                                    <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Fecha y Hora</p>
+                                        <p class="font-bold">Lunes, 28 Oct 2025 - 10:00 AM</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 pt-4 border-t-2 border-gray-300 dark:border-gray-600">
+                                    <div class="flex justify-between">
+                                        <span>Subtotal</span>
+                                        <span class="font-bold" id="subtotal-amount">40,00 €</span>
+                                    </div>
+                                    <div id="discount-row" class="flex justify-between text-green-600 dark:text-green-400 hidden">
+                                        <span>Descuento (<span id="discount-name"></span>)</span>
+                                        <span class="font-bold" id="discount-amount">-0,00 €</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>IVA (21%)</span>
+                                        <span class="font-bold" id="iva-amount">8,40 €</span>
+                                    </div>
+                                    <div class="flex justify-between text-lg font-bold pt-3 border-t border-gray-200 dark:border-gray-700">
+                                        <span>Total</span>
+                                        <span class="text-primary" id="total-amount">48,40 €</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                    <div class="flex items-center gap-2 text-green-800 dark:text-green-200">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                        <span class="font-bold">Política de Cancelación</span>
+                                    </div>
+                                    <p class="text-sm text-green-700 dark:text-green-300 mt-2">
+                                        Cancelación gratuita hasta 24 horas antes de la cita.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+            
+            <!-- Footer (insertado dinámicamente) -->
+            
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation-config.js"></script>
+    <script src="js/navigation-enhanced.js"></script>
+    
+    <script>
+        // ========================================
+        // MEJORA: Sistema de Códigos de Descuento y Cálculo Automático
+        // ========================================
+        
+        // Definición de códigos de descuento válidos
+        const discountCodes = {
+            'PRIMERAVEZ': { type: 'percentage', value: 10, description: '10% de descuento' },
+            'SALUD2025': { type: 'percentage', value: 15, description: '15% de descuento' },
+            'AMIGO20': { type: 'fixed', value: 5, description: '5€ de descuento' }
+        };
+
+        // Variables globales para el cálculo
+        let currentDiscount = null;
+        let pointsDiscount = 0; // NUEVO: Descuento por puntos
+        const BASE_SUBTOTAL = 40.00; // Precio base del servicio
+        const IVA_RATE = 0.21; // 21% IVA
+        let availablePoints = parseInt(localStorage.getItem('userPoints')) || 120; // NUEVO: Cargar puntos del usuario
+
+        // Función para calcular el total en tiempo real
+        function calculateTotal() {
+            let subtotal = BASE_SUBTOTAL;
+            let discountAmount = 0;
+            
+            // Aplicar descuento por código si existe
+            if (currentDiscount) {
+                if (currentDiscount.type === 'percentage') {
+                    discountAmount = subtotal * (currentDiscount.value / 100);
+                } else if (currentDiscount.type === 'fixed') {
+                    discountAmount = currentDiscount.value;
+                }
+            }
+            
+            // NUEVO: Sumar descuento por puntos
+            discountAmount += pointsDiscount;
+            
+            // Calcular subtotal con descuento
+            const subtotalAfterDiscount = subtotal - discountAmount;
+            
+            // Calcular IVA sobre el subtotal con descuento
+            const ivaAmount = subtotalAfterDiscount * IVA_RATE;
+            
+            // Calcular total final
+            const total = subtotalAfterDiscount + ivaAmount;
+            
+            // Actualizar UI
+            document.getElementById('subtotal-amount').textContent = `${subtotal.toFixed(2)} €`;
+            document.getElementById('iva-amount').textContent = `${ivaAmount.toFixed(2)} €`;
+            document.getElementById('total-amount').textContent = `${total.toFixed(2)} €`;
+            document.getElementById('payment-button-text').textContent = `Pagar ${total.toFixed(2)} €`;
+            document.getElementById('transfer-amount').textContent = `${total.toFixed(2)} €`;
+            
+            // Mostrar/ocultar fila de descuento
+            if (currentDiscount) {
+                document.getElementById('discount-row').classList.remove('hidden');
+                document.getElementById('discount-name').textContent = currentDiscount.description;
+                document.getElementById('discount-amount').textContent = `-${discountAmount.toFixed(2)} €`;
+            } else {
+                document.getElementById('discount-row').classList.add('hidden');
+            }
+        }
+
+        // Función para aplicar código de descuento
+        function applyDiscount() {
+            const codeInput = document.getElementById('discountCode');
+            const code = codeInput.value.toUpperCase().trim();
+            const messageContainer = document.getElementById('discount-message');
+            const messageBox = document.getElementById('discount-message-container');
+            const icon = document.getElementById('discount-icon');
+            const text = document.getElementById('discount-text');
+            
+            if (!code) {
+                // Si el código está vacío, limpiar el descuento
+                currentDiscount = null;
+                calculateTotal();
+                messageContainer.classList.add('hidden');
+                return;
+            }
+            
+            // Verificar si el código es válido
+            if (discountCodes[code]) {
+                currentDiscount = discountCodes[code];
+                
+                // Mostrar mensaje de éxito
+                messageBox.className = 'flex items-center gap-2 p-3 rounded-lg bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200';
+                icon.textContent = 'check_circle';
+                icon.className = 'material-symbols-outlined text-green-600';
+                text.textContent = `✓ Código aplicado: ${currentDiscount.description}`;
+                messageContainer.classList.remove('hidden');
+                
+                // Calcular nuevo total
+                calculateTotal();
+                
+                showSuccessMessage(`Código de descuento aplicado: ${currentDiscount.description}`);
+            } else {
+                // Código inválido
+                currentDiscount = null;
+                
+                // Mostrar mensaje de error
+                messageBox.className = 'flex items-center gap-2 p-3 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200';
+                icon.textContent = 'cancel';
+                icon.className = 'material-symbols-outlined text-red-600';
+                text.textContent = '✗ Código de descuento no válido';
+                messageContainer.classList.remove('hidden');
+                
+                // Recalcular sin descuento
+                calculateTotal();
+                
+                showErrorMessage('Código de descuento no válido');
+            }
+        }
+
+        // Permitir aplicar descuento con Enter
+        document.getElementById('discountCode')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyDiscount();
+            }
+        });
+
+        // NUEVO: Aplicar descuento por puntos (100 puntos = 5€)
+        function applyPointsDiscount() {
+            const pointsInput = document.getElementById('points-to-use');
+            const points = parseInt(pointsInput.value) || 0;
+            const messageContainer = document.getElementById('points-message');
+            const messageText = document.getElementById('points-text');
+            
+            // Validar puntos
+            if (points <= 0) {
+                pointsDiscount = 0;
+                calculateTotal();
+                messageContainer.classList.add('hidden');
+                return;
+            }
+            
+            if (points > availablePoints) {
+                showErrorMessage(`Solo tienes ${availablePoints} puntos disponibles`);
+                pointsInput.value = availablePoints;
+                return;
+            }
+            
+            // Calcular descuento (100 puntos = 5€)
+            const discountPercentage = points / 100;
+            pointsDiscount = discountPercentage * 5;
+            
+            // Actualizar puntos disponibles mostrados
+            document.getElementById('available-points').textContent = availablePoints;
+            
+            // Mostrar mensaje
+            messageContainer.classList.remove('hidden');
+            messageText.textContent = `✓ Usando ${points} puntos = ${pointsDiscount.toFixed(2)}€ de descuento`;
+            
+            // Recalcular total
+            calculateTotal();
+            
+            showSuccessMessage(`Descuento por puntos aplicado: ${pointsDiscount.toFixed(2)}€`);
+        }
+
+        // Calcular total inicial al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar puntos del localStorage
+            availablePoints = parseInt(localStorage.getItem('userPoints')) || 120;
+            document.getElementById('available-points').textContent = availablePoints;
+            document.getElementById('points-to-use').max = availablePoints;
+            
+            calculateTotal();
+        });
+
+        // Switch payment method
+        function switchPaymentMethod(method) {
+            document.getElementById('card-form').classList.add('hidden');
+            document.getElementById('paypal-form').classList.add('hidden');
+            document.getElementById('transfer-form').classList.add('hidden');
+            
+            const totalAmount = document.getElementById('total-amount').textContent;
+            
+            if (method === 'card') {
+                document.getElementById('card-form').classList.remove('hidden');
+                document.getElementById('payment-button-text').textContent = `Pagar ${totalAmount}`;
+            } else if (method === 'paypal') {
+                document.getElementById('paypal-form').classList.remove('hidden');
+                document.getElementById('payment-button-text').textContent = 'Continuar con PayPal';
+            } else if (method === 'transfer') {
+                document.getElementById('transfer-form').classList.remove('hidden');
+                document.getElementById('payment-button-text').textContent = 'Confirmar Transferencia';
+                generateTransferReference();
+            }
+        }
+
+        // Generate transfer reference
+        function generateTransferReference() {
+            const date = new Date();
+            const ref = 'CITA-' + date.getFullYear() + 
+                       (date.getMonth() + 1).toString().padStart(2, '0') + 
+                       date.getDate().toString().padStart(2, '0') + '-' +
+                       Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            document.getElementById('transfer-reference').textContent = ref;
+            return ref;
+        }
+
+        // Copy transfer info
+        function copyTransferInfo() {
+            const info = `
+Datos para Transferencia Bancaria:
+---------------------------------
+Banco: Banco Santander
+Titular: Plataforma de Citas Médicas S.L.
+IBAN: ES91 0049 1500 0512 3456 7890
+BIC/SWIFT: BSCHESMM
+Concepto: ${document.getElementById('transfer-reference').textContent}
+Importe: ${document.getElementById('transfer-amount').textContent}
+            `.trim();
+            
+            navigator.clipboard.writeText(info).then(() => {
+                showSuccessMessage('Información copiada al portapapeles');
+            });
+        }
+
+        // Format card number
+        document.getElementById('card-number')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formatted;
+        });
+
+        // Format expiry
+        document.getElementById('card-expiry')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Process payment
+        function processPayment() {
+            const method = document.querySelector('input[name="payment_method"]:checked').value;
+            const btn = document.getElementById('submit-payment');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Procesando...';
+            
+            // Validate based on method
+            if (method === 'card') {
+                const cardNumber = document.getElementById('card-number').value;
+                const cardExpiry = document.getElementById('card-expiry').value;
+                const cardCVV = document.getElementById('card-cvv').value;
+                const cardHolder = document.getElementById('card-holder').value;
+                
+                if (!cardNumber || !cardExpiry || !cardCVV || !cardHolder) {
+                    showErrorMessage('Por favor, completa todos los campos de la tarjeta');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Pagar 45,00 €';
+                    return;
+                }
+            } else if (method === 'paypal') {
+                const paypalEmail = document.getElementById('paypal-email').value;
+                
+                if (!paypalEmail || !validateEmail(paypalEmail)) {
+                    showErrorMessage('Por favor, introduce un correo electrónico válido de PayPal');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Continuar con PayPal';
+                    return;
+                }
+            }
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                showSuccessMessage('¡Pago procesado con éxito!');
+                
+                setTimeout(() => {
+                    if (method === 'transfer') {
+                        alert('Recibirás un correo con las instrucciones de transferencia.\nTu cita se confirmará al recibir el pago.');
+                    }
+                    window.location.href = 'patient_dashboard.html';
+                }, 2000);
+            }, 2000);
+        }
+    </script>
+
+    <!-- 🔒 PROTECCIÓN JWT -->
+    <script src="js/api.js"></script>
+    <script>
+        // CRÍTICO: Proteger acceso - Solo pacientes autenticados
+        protectPage('paciente');
+    </script>
+</body>
+</html>

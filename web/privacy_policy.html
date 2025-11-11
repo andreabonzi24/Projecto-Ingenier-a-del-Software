@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Política de Privacidad - Plataforma de Citas Médicas"/>
+    <title>Política de Privacidad - Plataforma de Citas Médicas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet"/>
+    <link href="css/navigation.css" rel="stylesheet"/>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f4f8f8",
+                        "background-dark": "#112121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            
+            <!-- Header / Navbar (insertado dinámicamente) -->
+            
+            <!-- Main Content -->
+            <main class="flex flex-1 justify-center px-4 sm:px-6 lg:px-8 py-12">
+                <div class="layout-content-container flex flex-col max-w-[900px] flex-1">
+                    
+                    <!-- Header -->
+                    <div class="text-center mb-12">
+                        <span class="material-symbols-outlined text-primary text-6xl mb-4">shield</span>
+                        <h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-[#0e1b1b] dark:text-white mb-4">
+                            Política de Privacidad
+                        </h1>
+                        <p class="text-base text-[#4d9997] dark:text-gray-400">
+                            Última actualización: 30 de octubre de 2025
+                        </p>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="prose prose-lg dark:prose-invert max-w-none">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-6 rounded-lg mb-8">
+                            <p class="text-blue-900 dark:text-blue-200">
+                                <strong>Nota importante:</strong> Esta plataforma utiliza backend Node.js con medidas de seguridad profesionales. 
+                                Todos los datos mostrados son de prueba y no se almacenan ni procesan datos reales de usuarios.
+                            </p>
+                        </div>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">1. Introducción</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                La Plataforma de Citas Médicas se compromete a proteger la privacidad y seguridad de los datos personales 
+                                de nuestros usuarios. Esta política de privacidad describe cómo recopilamos, usamos y protegemos su información 
+                                personal de acuerdo con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea.
+                            </p>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">2. Datos que Recopilamos</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                En un escenario de producción, recopilaríamos los siguientes tipos de datos:
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 text-[#4d9997] dark:text-gray-300 ml-4">
+                                <li>Datos de identificación personal (nombre, DNI, tarjeta sanitaria)</li>
+                                <li>Datos de contacto (email, teléfono, dirección)</li>
+                                <li>Datos de salud (historial médico, citas, tratamientos)</li>
+                                <li>Datos de uso de la plataforma (logs de acceso, preferencias)</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">3. Uso de los Datos</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                Los datos personales se utilizarían para:
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 text-[#4d9997] dark:text-gray-300 ml-4">
+                                <li>Gestionar y procesar citas médicas</li>
+                                <li>Facilitar la comunicación entre pacientes y profesionales de la salud</li>
+                                <li>Mejorar nuestros servicios y la experiencia del usuario</li>
+                                <li>Cumplir con obligaciones legales y normativas</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">4. Seguridad de los Datos</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                En un entorno de producción, implementaríamos medidas de seguridad técnicas y organizativas apropiadas:
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 text-[#4d9997] dark:text-gray-300 ml-4">
+                                <li>Cifrado de datos en tránsito y en reposo</li>
+                                <li>Autenticación de dos factores</li>
+                                <li>Auditorías de seguridad periódicas</li>
+                                <li>Copias de seguridad regulares</li>
+                                <li>Acceso restringido según el principio de mínimo privilegio</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">5. Derechos del Usuario</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                Según el RGPD, los usuarios tendrían derecho a:
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 text-[#4d9997] dark:text-gray-300 ml-4">
+                                <li>Acceso a sus datos personales</li>
+                                <li>Rectificación de datos incorrectos o incompletos</li>
+                                <li>Supresión de datos ("derecho al olvido")</li>
+                                <li>Limitación del tratamiento de datos</li>
+                                <li>Portabilidad de datos</li>
+                                <li>Oposición al tratamiento de datos</li>
+                            </ul>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">6. Cookies y Tecnologías Similares</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                En producción, utilizaríamos cookies esenciales para el funcionamiento de la plataforma, 
+                                así como cookies analíticas (con su consentimiento) para mejorar nuestros servicios.
+                            </p>
+                        </section>
+
+                        <section class="mb-8">
+                            <h2 class="text-2xl font-bold text-[#0e1b1b] dark:text-white mb-4">7. Contacto</h2>
+                            <p class="text-[#4d9997] dark:text-gray-300 leading-relaxed mb-4">
+                                Para cualquier consulta sobre esta política de privacidad o sobre el tratamiento de sus datos personales, 
+                                puede contactarnos a través de:
+                            </p>
+                            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                                <p class="text-[#4d9997] dark:text-gray-300">
+                                    <strong>Email:</strong> privacy@citasmedicas.es<br>
+                                    <strong>Dirección:</strong> Calle Ejemplo 123, 28001 Madrid<br>
+                                    <strong>Teléfono:</strong> +34 900 123 456
+                                </p>
+                            </div>
+                        </section>
+
+                        <div class="bg-primary/10 dark:bg-primary/20 p-6 rounded-xl mt-12">
+                            <p class="text-sm text-[#0e1b1b] dark:text-white">
+                                Esta política de privacidad puede actualizarse periódicamente. Le notificaremos sobre 
+                                cualquier cambio significativo mediante un aviso destacado en nuestra plataforma.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+            
+            <!-- Footer (insertado dinámicamente) -->
+            
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation-config.js"></script>
+    <script src="js/navigation-enhanced.js"></script>
+</body>
+</html>

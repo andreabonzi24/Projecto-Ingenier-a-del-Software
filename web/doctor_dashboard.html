@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<parameter name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Doctor Dashboard - Plataforma de Citas Médicas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#0E7C7B",
+                    "background-light": "#F4F8F8",
+                    "background-dark": "#112121",
+                    "surface": "#FFFFFF",
+                    "text-dark": "#0e1b1b",
+                    "text-light-mode": "#0e1b1b",
+                    "text-dark-mode": "#f4f8f8",
+                    "border-light": "#d0e7e7",
+                    "border-dark": "#2a3f3f"
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.5rem",
+                    "lg": "0.75rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+                },
+            },
+        },
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Modal styles */
+    .modal {
+        display: none;
+        animation: fadeIn 0.2s ease-in;
+    }
+    .modal.active {
+        display: flex;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light-mode dark:text-text-dark-mode">
+<!-- Cargar API antes del contenido -->
+<script src="js/api.js"></script>
+<script>
+    // 🔒 PROTECCIÓN: Solo médicos pueden acceder
+    if (!protectPage('medico')) {
+        // Si falla la validación, protectPage() redirige automáticamente
+    }
+    
+    // 👤 PERSONALIZACIÓN: Mostrar nombre del usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        const user = authAPI.getCurrentUser();
+        if (user && user.name) {
+            // Actualizar nombre en el sidebar
+            const doctorNameElement = document.querySelector('aside h2');
+            if (doctorNameElement) {
+                doctorNameElement.textContent = user.name;
+            }
+            
+            // Actualizar saludo en el dashboard
+            const greetingElement = document.querySelector('.text-3xl');
+            if (greetingElement && greetingElement.textContent.includes('Dr.')) {
+                const firstName = user.name.split(' ')[0];
+                const time = new Date().getHours();
+                let greeting = 'Buenos días';
+                if (time >= 12 && time < 20) greeting = 'Buenas tardes';
+                else if (time >= 20) greeting = 'Buenas noches';
+                greetingElement.textContent = `${greeting}, ${firstName}`;
+            }
+        }
+    });
+</script>
+
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-surface dark:bg-background-dark flex flex-col border-r border-border-light dark:border-border-dark">
+<div class="p-6 flex items-center gap-3 border-b border-border-light dark:border-border-dark">
+<span class="material-symbols-outlined text-primary text-3xl">medical_services</span>
+<h1 class="text-lg font-bold text-text-dark dark:text-white">Plataforma de Citas</h1>
+</div>
+<div class="p-4 flex-grow">
+<div class="flex items-center gap-3 mb-6">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDs_RuksBEDN_3C0wBm2SVHjCZhyKDUQxWAFcHaxX36-J2eUM7ZYX9jkOP_EPTx1zvsYaosWJnMrrU5h7MSe7qeFnW1jTGeHOFiEvSP9Oig46N3aHgw3mlCOvrSiI9XRDJWhv3rXAsbYJrllpZT0C3429Mrml-gpqAJ56muwlA6UVX4q6vAOIaX-PthgTUk72HtYbiXKybWkVQFsijN9fyOABuOQLB7d_SI-VToU_02-SggLbcAenuoMz1Mz7prjy0lVFCc65UhZg0");'></div>
+<div>
+<h2 class="text-base font-medium text-text-dark dark:text-white">Dr. Ana Morales</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">Medicina General</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="sidebar-nav-item active flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-medium" href="#dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#orders">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Órdenes médicas</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#appointments">
+<span class="material-symbols-outlined">calendar_month</span>
+<span>Citas de pacientes</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#patients">
+<span class="material-symbols-outlined">group</span>
+<span>Mis pacientes</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#messages">
+<span class="material-symbols-outlined">chat</span>
+<span>Mensajes</span>
+<span class="ml-auto px-2 py-0.5 text-xs rounded-full bg-red-500 text-white">2</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#availability">
+<span class="material-symbols-outlined">domain_verification</span>
+<span>Disponibilidad</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="#profile">
+<span class="material-symbols-outlined">person</span>
+<span>Perfil</span>
+</a>
+<a class="sidebar-nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-text-dark dark:text-gray-300" href="__faq.html">
+<span class="material-symbols-outlined">support_agent</span>
+<span>Soporte</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col">
+<!-- Header -->
+<header class="flex items-center justify-end px-8 py-4 bg-surface dark:bg-background-dark border-b border-border-light dark:border-border-dark">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-text-dark dark:text-gray-300">notifications</span>
+</button>
+<button id="logoutBtn" class="logout-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-text-dark dark:text-gray-300">logout</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<!-- Dashboard Section -->
+<div id="dashboard-section" class="section">
+<div class="mb-8">
+<p class="text-3xl font-black text-text-dark dark:text-white tracking-tight">Buenos días, Dr. Morales</p>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Órdenes activas</p>
+<p class="text-4xl font-bold text-primary">12</p>
+</div>
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Citas pendientes</p>
+<p class="text-4xl font-bold text-primary">5</p>
+</div>
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark flex flex-col gap-2">
+<p class="text-base font-medium text-text-dark dark:text-gray-300">Pacientes atendidos (semana)</p>
+<p class="text-4xl font-bold text-primary">34</p>
+</div>
+</div>
+</div>
+
+<!-- Orders Section -->
+<div id="orders-section" class="section hidden">
+<div class="mb-8 flex justify-between items-center">
+<h2 class="text-3xl font-black text-text-dark dark:text-white">Órdenes Médicas</h2>
+<button onclick="openNewOrderModal()" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span>Crear nueva orden médica</span>
+</button>
+</div>
+
+<!-- Filtros -->
+<div class="mb-6 flex gap-4">
+<select id="status-filter" onchange="filterOrders()" class="form-select rounded-lg border-border-light dark:border-border-dark bg-surface dark:bg-gray-800 focus:ring-primary focus:border-primary">
+<option value="all">Todos los estados</option>
+<option value="pending">Pendiente</option>
+<option value="completed">Completada</option>
+<option value="cancelled">Cancelada</option>
+</select>
+<input type="text" id="search-orders" onkeyup="filterOrders()" placeholder="Buscar por paciente o ID..." class="form-input flex-1 rounded-lg border-border-light dark:border-border-dark bg-surface dark:bg-gray-800 focus:ring-primary focus:border-primary"/>
+</div>
+
+<!-- Tabla de Órdenes -->
+<div class="bg-surface dark:bg-gray-800 rounded-xl border border-border-light dark:border-border-dark overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-background-light dark:bg-background-dark/50 text-sm text-gray-500 dark:text-gray-400">
+<tr>
+<th class="px-6 py-3 font-medium">ID Orden</th>
+<th class="px-6 py-3 font-medium">Paciente</th>
+<th class="px-6 py-3 font-medium">Tipo de Prueba</th>
+<th class="px-6 py-3 font-medium">Fecha de Emisión</th>
+<th class="px-6 py-3 font-medium">Estado</th>
+<th class="px-6 py-3 font-medium text-center">Acciones</th>
+</tr>
+</thead>
+<tbody id="orders-table-body" class="divide-y divide-border-light dark:divide-border-dark">
+<!-- Orders will be inserted here -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- Patients Section -->
+<div id="patients-section" class="section hidden">
+<div class="mb-8">
+<h2 class="text-3xl font-black text-text-dark dark:text-white">Mis Pacientes</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2">Gestiona el historial de tus pacientes</p>
+</div>
+
+<!-- Patient List -->
+<div id="patients-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Patients will be inserted here -->
+</div>
+</div>
+
+<!-- Availability Section -->
+<div id="availability-section" class="section hidden">
+<div class="mb-8">
+<h2 class="text-3xl font-black text-text-dark dark:text-white">Disponibilidad de Centros</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2">Consulta la disponibilidad de los centros médicos</p>
+</div>
+
+<div id="centers-availability" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Centers will be inserted here -->
+</div>
+</div>
+
+<!-- NUEVO: Messages Section -->
+<div id="messages-section" class="section hidden">
+<div class="mb-8">
+<h2 class="text-3xl font-black text-text-dark dark:text-white">Mensajes con Pacientes</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2">Comunicación directa con tus pacientes</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Lista de conversaciones -->
+<div class="lg:col-span-1 bg-surface dark:bg-gray-800 rounded-xl border border-border-light dark:border-border-dark">
+<div class="p-4 border-b border-border-light dark:border-border-dark">
+<input type="text" id="search-conversations" placeholder="Buscar conversaciones..." class="form-input w-full rounded-lg border-border-light dark:border-border-dark focus:ring-primary" onkeyup="filterConversations()"/>
+</div>
+<div id="conversations-list" class="divide-y divide-border-light dark:divide-border-dark max-h-[600px] overflow-y-auto">
+<!-- Conversations will be inserted here -->
+</div>
+</div>
+
+<!-- Área de chat -->
+<div class="lg:col-span-2 bg-surface dark:bg-gray-800 rounded-xl border border-border-light dark:border-border-dark flex flex-col">
+<div class="p-4 border-b border-border-light dark:border-border-dark">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 rounded-full size-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<h3 class="font-bold text-text-dark dark:text-white" id="chat-patient-name">Selecciona una conversación</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400" id="chat-patient-status">-</p>
+</div>
+</div>
+</div>
+<div id="chat-messages" class="flex-1 p-4 overflow-y-auto min-h-[400px] max-h-[500px] space-y-3 bg-gray-50 dark:bg-gray-900">
+<div class="text-center text-gray-400 mt-20">
+<span class="material-symbols-outlined text-6xl">chat_bubble_outline</span>
+<p class="mt-2">Selecciona una conversación para empezar</p>
+</div>
+</div>
+<div class="p-4 border-t border-border-light dark:border-border-dark">
+<div class="flex gap-2">
+<input type="text" id="message-input" placeholder="Escribe un mensaje..." class="form-input flex-1 rounded-lg border-border-light dark:border-border-dark focus:ring-primary" onkeypress="if(event.key==='Enter') sendDoctorMessage()" disabled/>
+<button onclick="sendDoctorMessage()" id="send-message-btn" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50" disabled>
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+<!-- Footer -->
+<footer class="px-8 py-4 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-border-light dark:border-border-dark">
+<p>Política de privacidad | Soporte | MIT © 2025</p>
+</footer>
+</div>
+</div>
+
+<!-- MODAL: Nueva Orden Médica -->
+<div id="new-order-modal" class="modal fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+<div class="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+<div class="p-6 border-b border-gray-200 dark:border-gray-700">
+<div class="flex justify-between items-center">
+<h3 class="text-2xl font-bold text-text-dark dark:text-white">Crear Nueva Orden Médica</h3>
+<button onclick="closeNewOrderModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<form id="new-order-form" class="p-6 space-y-4">
+<div>
+<label class="block text-sm font-medium mb-2">Paciente *</label>
+<select required class="form-select w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary">
+<option value="">Seleccionar paciente...</option>
+<option value="1">Carlos Ruiz</option>
+<option value="2">Luisa Fernandez</option>
+<option value="3">Javier Gomez</option>
+<option value="4">María López</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Tipo de Prueba *</label>
+<select required class="form-select w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary">
+<option value="">Seleccionar tipo...</option>
+<option value="blood">Análisis de Sangre</option>
+<option value="xray">Radiografía</option>
+<option value="mri">Resonancia Magnética</option>
+<option value="ct">Tomografía</option>
+<option value="ultrasound">Ecografía</option>
+<option value="other">Otra</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Prioridad *</label>
+<select required class="form-select w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary">
+<option value="normal">Normal</option>
+<option value="urgent">Urgente</option>
+<option value="scheduled">Programada</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Observaciones</label>
+<textarea rows="4" placeholder="Instrucciones adicionales..." class="form-textarea w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-primary"></textarea>
+</div>
+<div class="flex gap-3 pt-4">
+<button type="submit" class="flex-1 px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-colors">
+Crear Orden
+</button>
+<button type="button" onclick="closeNewOrderModal()" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-text-dark dark:text-white rounded-lg font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+Cancelar
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- 🆕 MÓDULO PRINCIPAL: Doctor Dashboard con conexión al backend -->
+<script type="module" src="js/modules/doctor-dashboard.js"></script>
+
+<!-- 🆕 MÓDULO DE ACCESIBILIDAD: WCAG 2.1 AA -->
+<script type="module" src="js/modules/accessibility.js"></script>
+
+<script>
+// ✅ La función logout() ahora está centralizada en navigation.js
+
+// DEPRECATED: El siguiente bloque será manejado por doctor-dashboard.js
+// Se mantiene temporalmente para compatibilidad, pero se eliminará
+let medicalOrders = [
+{id: '#ORD-001', patient: 'Carlos Ruiz', test: 'Análisis de Sangre', date: '2024-10-26', status: 'pending'},
+{id: '#ORD-002', patient: 'Luisa Fernandez', test: 'Radiografía de Tórax', date: '2024-10-25', status: 'completed'},
+{id: '#ORD-003', patient: 'Javier Gomez', test: 'Resonancia Magnética', date: '2024-10-24', status: 'pending'},
+{id: '#ORD-004', patient: 'María López', test: 'Análisis de Orina', date: '2024-10-23', status: 'completed'},
+{id: '#ORD-005', patient: 'Pedro Sánchez', test: 'Electrocardiograma', date: '2024-10-22', status: 'cancelled'}
+];
+
+const patients = [
+{name: 'Carlos Ruiz', age: 45, lastVisit: '2024-10-26', condition: 'Hipertensión'},
+{name: 'Luisa Fernandez', age: 32, lastVisit: '2024-10-25', condition: 'Asma'},
+{name: 'Javier Gomez', age: 58, lastVisit: '2024-10-24', condition: 'Diabetes tipo 2'},
+{name: 'María López', age: 28, lastVisit: '2024-10-23', condition: 'Sin condiciones'},
+{name: 'Pedro Sánchez', age: 50, lastVisit: '2024-10-22', condition: 'Artritis'},
+{name: 'Ana García', age: 39, lastVisit: '2024-10-21', condition: 'Migraña crónica'}
+];
+
+const centers = [
+{name: 'Hospital Central', availability: 'disponible', occupancy: 75, nextSlot: 'Hoy 14:00'},
+{name: 'Clínica del Sol', availability: 'ocupado', occupancy: 95, nextSlot: 'Mañana 09:00'},
+{name: 'Centro Médico Norte', availability: 'disponible', occupancy: 60, nextSlot: 'Hoy 16:30'},
+{name: 'Sanatorio Sur', availability: 'disponible', occupancy: 82, nextSlot: 'Hoy 15:15'}
+];
+
+// ========================================
+// NAVEGACIÓN
+// ========================================
+function showSection(sectionId) {
+document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+document.getElementById(`${sectionId}-section`).classList.remove('hidden');
+
+// Update sidebar active state
+document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+item.classList.remove('active', 'bg-primary/10', 'dark:bg-primary/20', 'text-primary', 'font-medium');
+item.classList.add('hover:bg-gray-100', 'dark:hover:bg-white/10', 'text-text-dark', 'dark:text-gray-300');
+});
+
+const activeItem = document.querySelector(`a[href="#${sectionId}"]`);
+if (activeItem) {
+activeItem.classList.add('active', 'bg-primary/10', 'dark:bg-primary/20', 'text-primary', 'font-medium');
+activeItem.classList.remove('hover:bg-gray-100', 'dark:hover:bg-white/10', 'text-text-dark', 'dark:text-gray-300');
+}
+}
+
+// Handle hash navigation
+window.addEventListener('hashchange', () => {
+const hash = window.location.hash.slice(1) || 'dashboard';
+showSection(hash);
+if (hash === 'orders') renderOrders();
+if (hash === 'patients') renderPatients();
+if (hash === 'availability') renderCentersAvailability();
+if (hash === 'messages') renderConversations(); // NUEVO
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+const hash = window.location.hash.slice(1) || 'dashboard';
+showSection(hash);
+});
+
+// ========================================
+// RENDER FUNCTIONS
+// ========================================
+// UX: Render orders con iconos de prioridad y tooltips
+function renderOrders() {
+const tbody = document.getElementById('orders-table-body');
+const filter = document.getElementById('status-filter').value;
+const search = document.getElementById('search-orders').value.toLowerCase();
+
+const filtered = medicalOrders.filter(order => {
+const matchesStatus = filter === 'all' || order.status === filter;
+const matchesSearch = order.patient.toLowerCase().includes(search) || order.id.toLowerCase().includes(search);
+return matchesStatus && matchesSearch;
+});
+
+tbody.innerHTML = filtered.map(order => {
+// UX: Determinar ícono y color según prioridad (simulado basado en el test)
+let priorityIcon = '';
+let priorityColor = '';
+if (order.test.includes('Resonancia') || order.test.includes('Magnética')) {
+priorityIcon = '<span class="material-symbols-outlined text-red-500 text-xl" title="Urgente">priority_high</span>';
+priorityColor = 'red-500';
+} else if (order.test.includes('Sangre') || order.test.includes('Orina')) {
+priorityIcon = '<span class="material-symbols-outlined text-blue-500 text-xl" title="Programada">schedule</span>';
+priorityColor = 'blue-500';
+} else {
+priorityIcon = '<span class="material-symbols-outlined text-orange-500 text-xl" title="Normal">radio_button_unchecked</span>';
+priorityColor = 'orange-500';
+}
+
+return `
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+${priorityIcon}
+<span class="text-text-dark dark:text-gray-200 font-medium">${escapeHtml(order.id)}</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="group relative">
+<span class="text-text-dark dark:text-gray-200 cursor-help">${escapeHtml(order.patient)}</span>
+<!-- UX: Tooltip con info del paciente -->
+<div class="hidden group-hover:block absolute z-10 left-0 bottom-full mb-2 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-xl w-48">
+<div class="space-y-1">
+<p><strong>Paciente:</strong> ${escapeHtml(order.patient)}</p>
+<p><strong>Última visita:</strong> ${order.date}</p>
+<p><strong>Estado:</strong> Activo</p>
+</div>
+<div class="absolute left-4 top-full w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">${order.test}</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-dark dark:text-gray-200">${order.date}</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusClass(order.status)}">
+${getStatusText(order.status)}
+</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-center">
+<button class="text-primary font-bold hover:underline transition-colors">Ver detalles</button>
+</td>
+</tr>
+`;
+}).join('');
+}
+
+function renderPatients() {
+const container = document.getElementById('patients-list');
+container.innerHTML = patients.map(patient => `
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 rounded-full size-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<h3 class="font-bold text-text-dark dark:text-white">${escapeHtml(patient.name)}</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">${escapeHtml(patient.age)} años</p>
+</div>
+</div>
+</div>
+<div class="space-y-2 text-sm">
+<p class="text-gray-600 dark:text-gray-400"><strong>Última visita:</strong> ${escapeHtml(patient.lastVisit)}</p>
+<p class="text-gray-600 dark:text-gray-400"><strong>Condición:</strong> ${escapeHtml(patient.condition)}</p>
+</div>
+<div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+<button class="text-primary font-bold hover:underline text-sm">Ver historial completo</button>
+</div>
+</div>
+`).join('');
+}
+
+function renderCentersAvailability() {
+const container = document.getElementById('centers-availability');
+container.innerHTML = centers.map(center => `
+<div class="bg-surface dark:bg-gray-800 p-6 rounded-xl border border-border-light dark:border-border-dark">
+<div class="flex items-start justify-between mb-4">
+<div>
+<h3 class="font-bold text-lg text-text-dark dark:text-white">${center.name}</h3>
+<span class="inline-flex items-center gap-1 mt-2 px-3 py-1 rounded-full text-xs font-medium ${center.availability === 'disponible' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'}">
+<span class="w-2 h-2 rounded-full ${center.availability === 'disponible' ? 'bg-green-500' : 'bg-red-500'}"></span>
+${center.availability === 'disponible' ? 'Disponible' : 'Ocupado'}
+</span>
+</div>
+</div>
+<div class="space-y-3">
+<div>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Ocupación</p>
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: ${center.occupancy}%"></div>
+</div>
+<span class="text-sm font-bold text-text-dark dark:text-white">${center.occupancy}%</span>
+</div>
+</div>
+<div class="pt-3 border-t border-gray-200 dark:border-gray-700">
+<p class="text-sm text-gray-600 dark:text-gray-400">
+<strong>Próximo horario:</strong> ${center.nextSlot}
+</p>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+// ========================================
+// MODAL FUNCTIONS
+// ========================================
+function openNewOrderModal() {
+document.getElementById('new-order-modal').classList.add('active');
+document.body.style.overflow = 'hidden';
+}
+
+function closeNewOrderModal() {
+document.getElementById('new-order-modal').classList.remove('active');
+document.body.style.overflow = 'auto';
+}
+
+document.getElementById('new-order-form').addEventListener('submit', (e) => {
+e.preventDefault();
+const newOrder = {
+id: `#ORD-${String(medicalOrders.length + 1).padStart(3, '0')}`,
+patient: e.target[0].options[e.target[0].selectedIndex].text,
+test: e.target[1].options[e.target[1].selectedIndex].text,
+date: new Date().toISOString().split('T')[0],
+status: 'pending'
+};
+medicalOrders.unshift(newOrder);
+renderOrders();
+closeNewOrderModal();
+alert('✓ Orden médica creada exitosamente');
+e.target.reset();
+});
+
+// ========================================
+// UTILITY FUNCTIONS
+// ========================================
+function getStatusClass(status) {
+switch(status) {
+case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300';
+case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+case 'cancelled': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+}
+}
+
+function getStatusText(status) {
+switch(status) {
+case 'pending': return 'Pendiente';
+case 'completed': return 'Completada';
+case 'cancelled': return 'Cancelada';
+default: return status;
+}
+}
+
+function filterOrders() {
+renderOrders();
+}
+
+// ========================================
+// NUEVO: SISTEMA DE MENSAJERÍA
+// ========================================
+
+let conversations = [
+{id: 1, patient: 'Carlos Ruiz', lastMessage: '¿Cuándo tengo que ir a recoger los resultados?', time: new Date(Date.now() - 10 * 60000), unread: true},
+{id: 2, patient: 'Luisa Fernandez', lastMessage: 'Gracias por la atención, doctor', time: new Date(Date.now() - 120 * 60000), unread: true},
+{id: 3, patient: 'Javier Gomez', lastMessage: 'Entendido, tomaré la medicación como indicó', time: new Date(Date.now() - 180 * 60000), unread: false},
+{id: 4, patient: 'María López', lastMessage: 'Buenos días doctor', time: new Date(Date.now() - 300 * 60000), unread: false}
+];
+
+let currentConversation = null;
+let messages = {
+1: [
+{from: 'patient', text: 'Buenos días doctor, ¿cuándo puedo recoger los resultados de mi análisis?', time: new Date(Date.now() - 30 * 60000)},
+{from: 'doctor', text: 'Buenos días Carlos. Los resultados estarán listos mañana por la tarde.', time: new Date(Date.now() - 20 * 60000)},
+{from: 'patient', text: '¿Cuándo tengo que ir a recoger los resultados?', time: new Date(Date.now() - 10 * 60000)}
+],
+2: [
+{from: 'patient', text: 'Doctor, quería agradecerle por la atención', time: new Date(Date.now() - 125 * 60000)},
+{from: 'doctor', text: 'Es un placer, Luisa. Cuídese mucho.', time: new Date(Date.now() - 122 * 60000)},
+{from: 'patient', text: 'Gracias por la atención, doctor', time: new Date(Date.now() - 120 * 60000)}
+],
+3: [],
+4: []
+};
+
+function renderConversations() {
+const container = document.getElementById('conversations-list');
+const search = document.getElementById('search-conversations').value.toLowerCase();
+
+const filtered = conversations.filter(conv => conv.patient.toLowerCase().includes(search));
+
+container.innerHTML = filtered.map(conv => `
+<div onclick="openConversation(${conv.id})" class="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${conv.unread ? 'bg-primary/5 dark:bg-primary/10' : ''}">
+<div class="flex items-start gap-3">
+<div class="bg-primary/20 rounded-full size-10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-bold text-sm text-text-dark dark:text-white truncate">${escapeHtml(conv.patient)}</h4>
+${conv.unread ? '<span class="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></span>' : ''}
+</div>
+<p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">${conv.lastMessage}</p>
+<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${getTimeAgo(conv.time)}</p>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+function openConversation(convId) {
+currentConversation = convId;
+const conv = conversations.find(c => c.id === convId);
+
+// Marcar como leída
+conv.unread = false;
+renderConversations();
+
+// Actualizar header del chat
+document.getElementById('chat-patient-name').textContent = conv.patient;
+document.getElementById('chat-patient-status').textContent = 'En línea';
+
+// Habilitar input
+document.getElementById('message-input').disabled = false;
+document.getElementById('send-message-btn').disabled = false;
+
+// Renderizar mensajes
+renderMessages(convId);
+}
+
+function renderMessages(convId) {
+const container = document.getElementById('chat-messages');
+const msgs = messages[convId] || [];
+
+container.innerHTML = msgs.map(msg => {
+const isDoctor = msg.from === 'doctor';
+return `
+<div class="flex ${isDoctor ? 'justify-end' : 'justify-start'}">
+<div class="${isDoctor ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-text-dark dark:text-white'} p-3 rounded-lg max-w-[70%] shadow-sm">
+<p class="text-sm">${escapeHtml(msg.text)}</p>
+<p class="text-xs mt-1 ${isDoctor ? 'text-white/70' : 'text-gray-500 dark:text-gray-400'}">${msg.time.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'})}</p>
+</div>
+</div>
+`;
+}).join(''); // XSS-SAFE: Mensajes de chat sanitizados
+
+container.scrollTop = container.scrollHeight;
+}
+
+function sendDoctorMessage() {
+const input = document.getElementById('message-input');
+const text = input.value.trim();
+
+if (!text || !currentConversation) return;
+
+const newMsg = {
+from: 'doctor',
+text: text,
+time: new Date()
+};
+
+if (!messages[currentConversation]) {
+messages[currentConversation] = [];
+}
+
+messages[currentConversation].push(newMsg);
+
+// Actualizar conversación
+const conv = conversations.find(c => c.id === currentConversation);
+conv.lastMessage = 'Tú: ' + text;
+conv.time = new Date();
+
+renderMessages(currentConversation);
+renderConversations();
+
+input.value = '';
+}
+
+function filterConversations() {
+renderConversations();
+}
+
+function getTimeAgo(date) {
+const seconds = Math.floor((new Date() - date) / 1000);
+if (seconds < 60) return 'Hace un momento';
+const minutes = Math.floor(seconds / 60);
+if (minutes < 60) return `Hace ${minutes} min`;
+const hours = Math.floor(minutes / 60);
+if (hours < 24) return `Hace ${hours}h`;
+const days = Math.floor(hours / 24);
+return `Hace ${days}d`;
+}
+
+// ✅ La función logout() ahora está centralizada en navigation.js
+</script>
+
+<!-- 🔒 API Module con sanitización XSS -->
+<script src="js/api.js"></script>
+
+<!-- ✅ Navigation Module con función logout centralizada -->
+<script src="js/navigation.js"></script>
+</body>
+</html>

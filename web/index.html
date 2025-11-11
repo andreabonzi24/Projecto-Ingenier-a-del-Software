@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Plataforma de Citas Médicas - Reserva tu cita médica más rápido y desde un solo lugar"/>
+    <title>Plataforma de Citas Médicas - Inicio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet"/>
+    <link href="css/navigation.css" rel="stylesheet"/>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f4f8f8",
+                        "background-dark": "#112121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+    <!-- Skip to main content (accesibilidad) -->
+    <a href="#main-content" class="skip-to-main">Saltar al contenido principal</a>
+
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="flex flex-1 justify-center">
+                <div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1 px-4 sm:px-6 lg:px-8">
+                    
+                    <!-- Header / Navbar (insertado dinámicamente) -->
+                    
+                    <!-- Main Content -->
+                    <main id="main-content" class="flex flex-col gap-10 md:gap-20">
+                        
+                        <!-- Hero Section -->
+                        <section class="w-full py-10 md:py-20" id="inicio">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                                <div class="flex flex-col gap-6 text-left">
+                                    <h1 class="text-[#0e1b1b] dark:text-white text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em]">
+                                        Reserva tu cita médica más rápido y desde un solo lugar
+                                    </h1>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal">
+                                        Centralizamos la disponibilidad de hospitales y clínicas para que elijas la opción más rápida y cercana.
+                                    </p>
+                                    <div class="flex flex-wrap gap-4 mt-4">
+                                        <button onclick="window.location.href='medical_appointment_login_page.html'" class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-shadow shadow-lg hover:shadow-xl">
+                                            <span class="truncate">Iniciar sesión</span>
+                                        </button>
+                                        <button onclick="window.location.href='#caracteristicas'" class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                                            <span class="truncate">Conoce más</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <img alt="Ilustración de doctores y tecnología médica" 
+                                         class="w-full max-w-md rounded-xl" 
+                                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBimzuL1Ac1I1ejvyMTZuubonIC_am9lr-0RBI0pTx_JUwJmyM_-9J62vRq5UGHMf84VFgECJyd2o-TPfM8Jr6_ugsIG9cBJJwbP-AVvXuaxlC3eO40OgX89xwqabD1mbLdQwwiBc2eGA84ma--6P7cA5Q1YreCT8GUzCqiOK8e5A6_uwvCa269Gw3aqmn6DK5gd865R5BF4i-v8S6NPwz8tHDDibShsktMPvRTM5uGT19NVFxH4mqSaPNA71h5Vxei8P1uj_WOVMs"/>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- How It Works Section -->
+                        <section class="py-10 md:py-20" id="ventajas">
+                            <div class="flex flex-col gap-4 text-center mb-10">
+                                <h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                                    Cómo funciona
+                                </h2>
+                                <p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal max-w-3xl mx-auto">
+                                    Tres sencillos pasos para conseguir tu cita.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary text-4xl">
+                                        <span class="material-symbols-outlined !text-4xl">badge</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Inicia sesión con tu tarjeta sanitaria
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Accede de forma segura con tus credenciales.
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary text-4xl">
+                                        <span class="material-symbols-outlined !text-4xl">search</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Busca la prueba o especialidad
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Encuentra lo que necesitas con nuestro buscador inteligente.
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-4 items-center text-center p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary text-4xl">
+                                        <span class="material-symbols-outlined !text-4xl">calendar_add_on</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Confirma tu cita en el centro más rápido
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Elige la opción que mejor se adapte a ti y confirma.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- UX: Sección de Estadísticas Rápidas -->
+                        <section class="py-10 md:py-16 bg-primary/5 dark:bg-primary/10 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+                            <div class="max-w-7xl mx-auto">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                                    <div class="text-center">
+                                        <div class="text-4xl md:text-5xl font-black text-primary mb-2 counter" data-target="5000">0</div>
+                                        <p class="text-sm md:text-base font-medium text-[#0e1b1b] dark:text-white">Citas Gestionadas</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-4xl md:text-5xl font-black text-primary mb-2 counter" data-target="98">0</div>
+                                        <p class="text-sm md:text-base font-medium text-[#0e1b1b] dark:text-white">% Satisfacción</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-4xl md:text-5xl font-black text-primary mb-2 counter" data-target="150">0</div>
+                                        <p class="text-sm md:text-base font-medium text-[#0e1b1b] dark:text-white">Centros Médicos</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-4xl md:text-5xl font-black text-primary mb-2 counter" data-target="24">0</div>
+                                        <p class="text-sm md:text-base font-medium text-[#0e1b1b] dark:text-white">Especialidades</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Key Features Section -->
+                        <section class="py-10 md:py-20" id="caracteristicas">
+                            <div class="flex flex-col gap-4 text-center mb-10">
+                                <h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                                    Características clave
+                                </h2>
+                                <p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal max-w-3xl mx-auto">
+                                    Descubre por qué somos la mejor opción para gestionar tus citas médicas.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary">
+                                        <span class="material-symbols-outlined !text-4xl">manage_search</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Búsqueda inteligente
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Nuestro sistema de búsqueda te ayuda a encontrar la mejor opción.
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary">
+                                        <span class="material-symbols-outlined !text-4xl">domain</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Red pública y privada
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Accede a la red de hospitales y clínicas más amplia.
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary">
+                                        <span class="material-symbols-outlined !text-4xl">schedule</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Citas más rápidas
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Consigue tu cita en tiempo récord gracias a nuestro sistema.
+                                    </p>
+                                </div>
+                                <div class="flex flex-col gap-3 p-6 rounded-xl bg-white dark:bg-background-dark shadow-md hover:shadow-xl transition-shadow card-hover">
+                                    <div class="text-primary">
+                                        <span class="material-symbols-outlined !text-4xl">verified_user</span>
+                                    </div>
+                                    <h3 class="text-[#0e1b1b] dark:text-white text-lg font-bold leading-tight">
+                                        Seguridad RGPD
+                                    </h3>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm font-normal leading-normal">
+                                        Tus datos están protegidos y seguros con nosotros.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- UX: Sección de Testimonios -->
+                        <section class="py-10 md:py-20" id="testimonios">
+                            <div class="flex flex-col gap-4 text-center mb-10">
+                                <h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                                    Lo que dicen nuestros pacientes
+                                </h2>
+                                <p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal max-w-3xl mx-auto">
+                                    Miles de personas ya confían en nuestra plataforma
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Testimonio 1 -->
+                                <div class="bg-white dark:bg-background-dark p-6 rounded-xl shadow-md hover:shadow-xl transition-all card-hover">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=0c7e7c&color=fff&size=48" alt="María García" class="w-12 h-12 rounded-full"/>
+                                        <div>
+                                            <h4 class="font-bold text-[#0e1b1b] dark:text-white">María García</h4>
+                                            <div class="flex gap-0.5">
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm leading-relaxed">
+                                        "Increíble plataforma. Conseguí cita para cardiología en menos de 24 horas. El proceso fue súper sencillo y el seguimiento excelente."
+                                    </p>
+                                </div>
+                                
+                                <!-- Testimonio 2 -->
+                                <div class="bg-white dark:bg-background-dark p-6 rounded-xl shadow-md hover:shadow-xl transition-all card-hover">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <img src="https://ui-avatars.com/api/?name=Carlos+Lopez&background=0c7e7c&color=fff&size=48" alt="Carlos López" class="w-12 h-12 rounded-full"/>
+                                        <div>
+                                            <h4 class="font-bold text-[#0e1b1b] dark:text-white">Carlos López</h4>
+                                            <div class="flex gap-0.5">
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm leading-relaxed">
+                                        "Por fin una plataforma que centraliza todas las citas. Ya no tengo que llamar a cada centro por separado. ¡Ahorré muchísimo tiempo!"
+                                    </p>
+                                </div>
+                                
+                                <!-- Testimonio 3 -->
+                                <div class="bg-white dark:bg-background-dark p-6 rounded-xl shadow-md hover:shadow-xl transition-all card-hover">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <img src="https://ui-avatars.com/api/?name=Ana+Ruiz&background=0c7e7c&color=fff&size=48" alt="Ana Ruiz" class="w-12 h-12 rounded-full"/>
+                                        <div>
+                                            <h4 class="font-bold text-[#0e1b1b] dark:text-white">Ana Ruiz</h4>
+                                            <div class="flex gap-0.5">
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-yellow-400">★</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-sm leading-relaxed">
+                                        "Interfaz muy intuitiva y moderna. Las notificaciones y recordatorios me ayudan a no olvidar mis citas. ¡Totalmente recomendable!"
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- UX: FAQ Accordion -->
+                        <section class="py-10 md:py-20 bg-white dark:bg-background-dark -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8" id="faq">
+                            <div class="max-w-4xl mx-auto">
+                                <div class="flex flex-col gap-4 text-center mb-10">
+                                    <h2 class="text-[#0e1b1b] dark:text-white text-3xl lg:text-4xl font-black leading-tight tracking-[-0.033em]">
+                                        Preguntas Frecuentes
+                                    </h2>
+                                    <p class="text-[#4d9997] dark:text-gray-400 text-base lg:text-lg font-normal leading-normal">
+                                        Resolvemos tus dudas más comunes
+                                    </p>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <!-- FAQ Item 1 -->
+                                    <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                        <button onclick="toggleFAQ(this)" class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                            <span class="font-bold text-[#0e1b1b] dark:text-white">¿Cómo puedo reservar una cita?</span>
+                                            <span class="material-symbols-outlined text-primary transform transition-transform">expand_more</span>
+                                        </button>
+                                        <div class="faq-content hidden p-6 pt-0 text-[#4d9997] dark:text-gray-400">
+                                            <p>Reservar una cita es muy sencillo. Solo debes iniciar sesión, hacer clic en "Nueva Cita", seleccionar la especialidad que necesitas, elegir el centro médico más cercano y confirmar tu horario preferido. ¡En menos de 3 minutos tendrás tu cita confirmada!</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- FAQ Item 2 -->
+                                    <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                        <button onclick="toggleFAQ(this)" class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                            <span class="font-bold text-[#0e1b1b] dark:text-white">¿Puedo cancelar o modificar mi cita?</span>
+                                            <span class="material-symbols-outlined text-primary transform transition-transform">expand_more</span>
+                                        </button>
+                                        <div class="faq-content hidden p-6 pt-0 text-[#4d9997] dark:text-gray-400">
+                                            <p>Sí, puedes cancelar o modificar tu cita hasta 24 horas antes del horario programado sin ningún costo. Simplemente accede a "Mis Citas" en tu dashboard y selecciona la opción que necesites.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- FAQ Item 3 -->
+                                    <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                        <button onclick="toggleFAQ(this)" class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                            <span class="font-bold text-[#0e1b1b] dark:text-white">¿La plataforma es gratuita?</span>
+                                            <span class="material-symbols-outlined text-primary transform transition-transform">expand_more</span>
+                                        </button>
+                                        <div class="faq-content hidden p-6 pt-0 text-[#4d9997] dark:text-gray-400">
+                                            <p>El uso de la plataforma es completamente gratuito. Solo pagarás por el servicio médico que contrates directamente con el centro de salud elegido. Nosotros no cobramos comisiones adicionales.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- FAQ Item 4 -->
+                                    <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                        <button onclick="toggleFAQ(this)" class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                            <span class="font-bold text-[#0e1b1b] dark:text-white">¿Mis datos están seguros?</span>
+                                            <span class="material-symbols-outlined text-primary transform transition-transform">expand_more</span>
+                                        </button>
+                                        <div class="faq-content hidden p-6 pt-0 text-[#4d9997] dark:text-gray-400">
+                                            <p>Absolutamente. Cumplimos con todas las normativas RGPD y utilizamos encriptación de nivel bancario para proteger tu información personal y médica. Tus datos nunca serán compartidos sin tu consentimiento expreso.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- FAQ Item 5 -->
+                                    <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                                        <button onclick="toggleFAQ(this)" class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                            <span class="font-bold text-[#0e1b1b] dark:text-white">¿Qué centros médicos están disponibles?</span>
+                                            <span class="material-symbols-outlined text-primary transform transition-transform">expand_more</span>
+                                        </button>
+                                        <div class="faq-content hidden p-6 pt-0 text-[#4d9997] dark:text-gray-400">
+                                            <p>Trabajamos con más de 150 centros médicos en toda España, incluyendo hospitales públicos, clínicas privadas y centros de especialidades. Puedes ver todos los centros disponibles al buscar una cita en tu área.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-10">
+                                    <p class="text-[#4d9997] dark:text-gray-400 mb-4">¿No encuentras lo que buscas?</p>
+                                    <a href="__faq.html" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-colors">
+                                        <span class="material-symbols-outlined">help</span>
+                                        <span>Ver más preguntas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+
+                    </main>
+                    
+                    <!-- Footer (insertado dinámicamente) -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UX: Chat Flotante de Ayuda -->
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50">
+        <!-- Chat Button -->
+        <button id="chat-toggle" onclick="toggleChat()" class="bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center shadow-xl hover:bg-primary/90 transition-all hover:scale-110">
+            <span class="material-symbols-outlined text-3xl">chat</span>
+        </button>
+        
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden absolute bottom-20 right-0 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-primary text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined">support_agent</span>
+                    <div>
+                        <h3 class="font-bold">Asistente Virtual</h3>
+                        <p class="text-xs opacity-90">Estamos aquí para ayudarte</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="hover:bg-white/20 p-1 rounded">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-900">
+                <div class="flex gap-2">
+                    <div class="bg-primary/20 text-primary rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-sm">smart_toy</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[80%]">
+                        <p class="text-sm text-[#0e1b1b] dark:text-white">¡Hola! 👋 Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2 items-start">
+                    <button onclick="sendQuickReply('¿Cómo reservo una cita?')" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                        ¿Cómo reservo una cita?
+                    </button>
+                    <button onclick="sendQuickReply('¿Qué centros médicos tienen?')" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                        ¿Qué centros médicos tienen?
+                    </button>
+                    <button onclick="sendQuickReply('¿Puedo cancelar mi cita?')" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                        ¿Puedo cancelar mi cita?
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." class="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent text-sm" onkeypress="if(event.key==='Enter') sendChatMessage()"/>
+                    <button onclick="sendChatMessage()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                        <span class="material-symbols-outlined">send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation-config.js"></script>
+    <script src="js/navigation-enhanced.js"></script>
+    
+    <script>
+        // UX: Contador animado para estadísticas
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+            
+            const observerOptions = {
+                threshold: 0.5
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.getAttribute('data-target');
+                        let count = 0;
+                        const increment = target / speed;
+                        
+                        const updateCount = () => {
+                            count += increment;
+                            if (count < target) {
+                                counter.textContent = Math.ceil(count).toLocaleString();
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                counter.textContent = target.toLocaleString();
+                            }
+                        };
+                        
+                        updateCount();
+                        observer.unobserve(counter);
+                    }
+                });
+            }, observerOptions);
+            
+            counters.forEach(counter => observer.observe(counter));
+        }
+        
+        // UX: Toggle FAQ accordion
+        function toggleFAQ(button) {
+            const faqItem = button.closest('.faq-item');
+            const content = faqItem.querySelector('.faq-content');
+            const icon = button.querySelector('.material-symbols-outlined');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) {
+                    item.querySelector('.faq-content').classList.add('hidden');
+                    item.querySelector('.material-symbols-outlined').style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current FAQ
+            content.classList.toggle('hidden');
+            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+        
+        // UX: Toggle chat widget
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatToggle = document.getElementById('chat-toggle');
+            
+            chatWindow.classList.toggle('hidden');
+            
+            if (!chatWindow.classList.contains('hidden')) {
+                chatToggle.innerHTML = '<span class="material-symbols-outlined text-3xl">close</span>';
+            } else {
+                chatToggle.innerHTML = '<span class="material-symbols-outlined text-3xl">chat</span>';
+            }
+        }
+        
+        // NUEVO: Chatbot con IA simulada y respuestas inteligentes
+        const chatResponses = {
+            'reservar': 'Para reservar una cita, inicia sesión, haz clic en "Nueva Cita", selecciona la especialidad y el centro médico de tu preferencia. ¡Es muy rápido! 📅',
+            'cancelar': 'Puedes cancelar tu cita hasta 24 horas antes sin coste. Ve a "Mis Citas" y selecciona la opción de cancelar. 🔄',
+            'pago': 'Aceptamos tarjeta de crédito, PayPal y transferencia bancaria. El pago es 100% seguro con encriptación SSL. 💳',
+            'centros': 'Trabajamos con más de 150 centros médicos en toda España. Puedes ver todos al buscar una cita en tu área. 🏥',
+            'horario': 'Nuestro sistema está disponible 24/7. Los centros médicos tienen horarios variados que puedes consultar al reservar. ⏰',
+            'seguridad': 'Tus datos están protegidos con las más altas medidas de seguridad. Cumplimos con RGPD y usamos encriptación de nivel bancario. 🔒',
+            'cuenta': 'Para crear una cuenta, haz clic en "Registrarse" y completa el formulario. ¡Es gratis y toma menos de 2 minutos! 👤',
+            'ayuda': 'Estoy aquí para ayudarte. Puedes preguntarme sobre: citas, pagos, centros médicos, seguridad, o visitar nuestra <a href="__faq.html" class="text-primary underline">sección de ayuda</a>. 💬',
+            'descuento': 'Tenemos códigos promocionales como PRIMERAVEZ (10% descuento) y SALUD2025 (15% descuento). ¡Úsalos al pagar! 🎁'
+        };
+        
+        function getBotResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            // Buscar palabras clave en el mensaje
+            for (let [keyword, response] of Object.entries(chatResponses)) {
+                if (msg.includes(keyword)) {
+                    return response;
+                }
+            }
+            
+            // Respuestas adicionales por palabras clave
+            if (msg.includes('hola') || msg.includes('buenos') || msg.includes('buenas')) {
+                return '¡Hola! 👋 ¿En qué puedo ayudarte hoy? Puedo responder preguntas sobre citas, pagos, centros médicos y más.';
+            }
+            
+            if (msg.includes('gracias')) {
+                return '¡De nada! 😊 Si tienes más preguntas, aquí estaré. También puedes visitar nuestra <a href="__faq.html" class="text-primary underline">sección de preguntas frecuentes</a>.';
+            }
+            
+            if (msg.includes('precio') || msg.includes('costo') || msg.includes('cuánto')) {
+                return 'El precio de las consultas varía según el centro médico y la especialidad. Lo verás antes de confirmar tu cita. Además, tenemos descuentos disponibles! 💰';
+            }
+            
+            // Respuesta por defecto
+            return 'Interesante pregunta. Te recomiendo visitar nuestra <a href="__faq.html" class="text-primary underline">sección de preguntas frecuentes</a> o contactar con un agente humano para una respuesta más detallada. 📞';
+        }
+        
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const messagesContainer = document.querySelector('#chat-window .overflow-y-auto');
+            
+            // User message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'flex gap-2 justify-end';
+            userMsg.innerHTML = `
+                <div class="bg-primary text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[80%]">
+                    <p class="text-sm">${message}</p>
+                </div>
+            `;
+            messagesContainer.appendChild(userMsg);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Mostrar indicador de "escribiendo..."
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'flex gap-2 typing-indicator';
+            typingIndicator.innerHTML = `
+                <div class="bg-primary/20 text-primary rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-sm">smart_toy</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-gray-700 p-3 rounded-lg rounded-tl-none shadow-sm">
+                    <div class="flex gap-1">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.appendChild(typingIndicator);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Bot response (IA simulada)
+            setTimeout(() => {
+                typingIndicator.remove();
+                
+                const botResponse = getBotResponse(message);
+                const botMsg = document.createElement('div');
+                botMsg.className = 'flex gap-2';
+                botMsg.innerHTML = `
+                    <div class="bg-primary/20 text-primary rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-sm">smart_toy</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[80%]">
+                        <p class="text-sm text-[#0e1b1b] dark:text-white">${botResponse}</p>
+                    </div>
+                `;
+                messagesContainer.appendChild(botMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000 + Math.random() * 1000);
+            
+            input.value = '';
+        }
+        
+        // UX: Quick reply for chat
+        function sendQuickReply(question) {
+            document.getElementById('chat-input').value = question;
+            sendChatMessage();
+        }
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            animateCounters();
+        });
+    </script>
+</body>
+</html>

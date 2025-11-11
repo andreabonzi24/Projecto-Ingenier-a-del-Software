@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Administrador de Centro - Plataforma de Citas Médicas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#0E7C7B",
+                    "accent": "#00B894",
+                    "background-light": "#F4F8F8",
+                    "background-dark": "#112121",
+                    "container-light": "#FFFFFF",
+                    "container-dark": "#1A2E2E",
+                    "text-light": "#0e1b1b",
+                    "text-dark": "#E0F2F2",
+                    "subtext-light": "#4d9997",
+                    "subtext-dark": "#A3D4D3",
+                    "border-light": "#d0e7e7",
+                    "border-dark": "#2A4545",
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.5rem",
+                    "lg": "0.75rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+                },
+            },
+        },
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .modal {
+        display: none;
+    }
+    .modal.active {
+        display: flex;
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<!-- Cargar API antes del contenido -->
+<script src="js/api.js"></script>
+<script>
+    // 🔒 PROTECCIÓN: Solo admin_centro pueden acceder
+    if (!protectPage('admin_centro')) {
+        // Si falla la validación, protectPage() redirige automáticamente
+    }
+    
+    // 👤 PERSONALIZACIÓN: Mostrar nombre del usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        const user = authAPI.getCurrentUser();
+        if (user && user.name) {
+            // Actualizar nombre en el header
+            const userNameElement = document.getElementById('userName');
+            if (userNameElement) {
+                userNameElement.textContent = user.name;
+            }
+            
+            // Actualizar saludo
+            const greetingElement = document.getElementById('greeting');
+            if (greetingElement) {
+                const time = new Date().getHours();
+                let greeting = 'Buenos días';
+                if (time >= 12 && time < 20) greeting = 'Buenas tardes';
+                else if (time >= 20) greeting = 'Buenas noches';
+                greetingElement.textContent = `${greeting}, ${user.name.split(' ')[0]}`;
+            }
+        }
+    });
+</script>
+
+<div class="relative flex min-h-screen w-full flex-col">
+<div class="flex h-full w-full flex-1">
+<!-- SideNavBar -->
+<aside class="flex h-full min-h-screen w-64 flex-col justify-between bg-container-light dark:bg-container-dark p-4 border-r border-border-light dark:border-border-dark sticky top-0">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-3 px-2">
+<span class="material-symbols-outlined text-primary text-3xl">local_hospital</span>
+<h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-tight">Mi Centro Médico</h2>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary cursor-pointer hover:bg-primary/30" href="#dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-bold leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#staff">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-sm font-medium leading-normal">Personal del centro</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#appointments">
+<span class="material-symbols-outlined">calendar_month</span>
+<p class="text-sm font-medium leading-normal">Citas del centro</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#schedule">
+<span class="material-symbols-outlined">schedule</span>
+<p class="text-sm font-medium leading-normal">Horarios</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="healthcare_analytics_dashboard.html">
+<span class="material-symbols-outlined">monitoring</span>
+<p class="text-sm font-medium leading-normal">Estadísticas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#settings">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Configuración</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<button id="logoutBtn" class="logout-button flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 cursor-pointer">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium leading-normal">Cerrar sesión</p>
+</button>
+<div class="flex items-center gap-3 px-3 py-2 text-subtext-light dark:text-subtext-dark">
+<span class="material-symbols-outlined text-sm">copyright</span>
+<p class="text-xs font-medium">MIT © 2025</p>
+</div>
+</div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<!-- Header -->
+<div class="mb-8">
+<h1 id="greeting" class="text-4xl font-black text-text-light dark:text-text-dark mb-2">
+Buenos días
+</h1>
+<p class="text-subtext-light dark:text-subtext-dark" id="userName">
+Administrador del Centro
+</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Card 1: Citas Hoy -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-4xl text-primary">event</span>
+<span class="text-xs font-semibold px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">Hoy</span>
+</div>
+<h3 class="text-3xl font-black text-text-light dark:text-text-dark">24</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Citas programadas</p>
+</div>
+
+<!-- Card 2: Personal Activo -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-4xl text-green-500">group</span>
+<span class="text-xs font-semibold px-2 py-1 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300">Activo</span>
+</div>
+<h3 class="text-3xl font-black text-text-light dark:text-text-dark">12</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Médicos en turno</p>
+</div>
+
+<!-- Card 3: Pacientes del Mes -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-4xl text-accent">personal_injury</span>
+<span class="text-xs font-semibold px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">Mes</span>
+</div>
+<h3 class="text-3xl font-black text-text-light dark:text-text-dark">486</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Pacientes atendidos</p>
+</div>
+
+<!-- Card 4: Satisfacción -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-4xl text-yellow-500">sentiment_satisfied</span>
+<span class="text-xs font-semibold px-2 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300">Alta</span>
+</div>
+<h3 class="text-3xl font-black text-text-light dark:text-text-dark">4.8</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Valoración promedio</p>
+</div>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark mb-8">
+<h2 class="text-xl font-bold text-text-light dark:text-text-dark mb-4">Acciones rápidas</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="flex items-center gap-3 p-4 rounded-lg border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">person_add</span>
+<div class="text-left">
+<p class="font-semibold text-text-light dark:text-text-dark">Añadir médico</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark">Nuevo miembro del staff</p>
+</div>
+</button>
+<button class="flex items-center gap-3 p-4 rounded-lg border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">event_available</span>
+<div class="text-left">
+<p class="font-semibold text-text-light dark:text-text-dark">Configurar horarios</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark">Gestionar disponibilidad</p>
+</div>
+</button>
+<button class="flex items-center gap-3 p-4 rounded-lg border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">article</span>
+<div class="text-left">
+<p class="font-semibold text-text-light dark:text-text-dark">Ver reportes</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark">Estadísticas detalladas</p>
+</div>
+</button>
+</div>
+</div>
+
+<!-- Recent Activity -->
+<div class="bg-container-light dark:bg-container-dark p-6 rounded-xl border border-border-light dark:border-border-dark">
+<h2 class="text-xl font-bold text-text-light dark:text-text-dark mb-4">Actividad reciente</h2>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 rounded-lg bg-background-light dark:bg-background-dark">
+<span class="material-symbols-outlined text-primary text-2xl">person_check</span>
+<div class="flex-1">
+<p class="font-semibold text-text-light dark:text-text-dark">Nuevo médico registrado</p>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Dr. Juan Pérez - Cardiología</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark mt-1">Hace 2 horas</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg bg-background-light dark:bg-background-dark">
+<span class="material-symbols-outlined text-green-500 text-2xl">check_circle</span>
+<div class="flex-1">
+<p class="font-semibold text-text-light dark:text-text-dark">Cita completada</p>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Paciente: María García - Consulta general</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark mt-1">Hace 1 hora</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg bg-background-light dark:bg-background-dark">
+<span class="material-symbols-outlined text-yellow-500 text-2xl">schedule</span>
+<div class="flex-1">
+<p class="font-semibold text-text-light dark:text-text-dark">Horario actualizado</p>
+<p class="text-sm text-subtext-light dark:text-subtext-dark">Dra. Ana Rodríguez - Nuevos horarios de atención</p>
+<p class="text-xs text-subtext-light dark:text-subtext-dark mt-1">Hace 3 horas</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- JavaScript -->
+<script src="js/common.js"></script>
+<script src="js/navigation.js"></script>
+<script>
+    // Inicializar navegación si es necesario
+    console.log('Medical Center Dashboard cargado correctamente');
+</script>
+</body>
+</html>

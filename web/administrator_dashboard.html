@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plataforma de Citas Médicas - Panel del Administrador</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#0E7C7B",
+                    "accent": "#00B894",
+                    "background-light": "#F4F8F8",
+                    "background-dark": "#112121",
+                    "container-light": "#FFFFFF",
+                    "container-dark": "#1A2E2E",
+                    "text-light": "#0e1b1b",
+                    "text-dark": "#E0F2F2",
+                    "subtext-light": "#4d9997",
+                    "subtext-dark": "#A3D4D3",
+                    "border-light": "#d0e7e7",
+                    "border-dark": "#2A4545",
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {
+                    "DEFAULT": "0.5rem",
+                    "lg": "0.75rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+                },
+            },
+        },
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+    
+    /* NUEVO: Animación para Timeline */
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .modal {
+        display: none;
+    }
+    .modal.active {
+        display: flex;
+    }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<!-- Cargar API antes del contenido -->
+<script src="js/api.js"></script>
+<script>
+    // 🔒 PROTECCIÓN: Solo admins pueden acceder
+    const user = authAPI.getCurrentUser();
+    if (!user || (user.role !== 'admin_sistema' && user.role !== 'admin_centro')) {
+        alert('Acceso denegado. Solo administradores pueden acceder a esta página.');
+        authAPI.logout();
+    }
+    
+    // 👤 PERSONALIZACIÓN: Mostrar nombre del usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        const user = authAPI.getCurrentUser();
+        if (user && user.name) {
+            // Actualizar nombre en el header/dashboard
+            const titleElements = document.querySelectorAll('h1, h2');
+            titleElements.forEach(el => {
+                if (el.textContent.includes('Administrador') || el.textContent.includes('Panel')) {
+                    const roleText = user.role === 'admin_sistema' ? 'Administrador del Sistema' : 'Administrador de Centro';
+                    el.textContent = `Panel de ${roleText} - ${user.name.split(' ')[0]}`;
+                    return;
+                }
+            });
+        }
+    });
+</script>
+
+<div class="relative flex min-h-screen w-full flex-col">
+<div class="flex h-full w-full flex-1">
+<!-- SideNavBar -->
+<aside class="flex h-full min-h-screen w-64 flex-col justify-between bg-container-light dark:bg-container-dark p-4 border-r border-border-light dark:border-border-dark sticky top-0">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-3 px-2">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-tight">Plataforma de Citas</h2>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary cursor-pointer hover:bg-primary/30" href="#dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-bold leading-normal">Resumen general</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#roles-permisos">
+<span class="material-symbols-outlined">manage_accounts</span>
+<p class="text-sm font-medium leading-normal">Roles y permisos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#centros-medicos">
+<span class="material-symbols-outlined">local_hospital</span>
+<p class="text-sm font-medium leading-normal">Gestión de centros</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="healthcare_analytics_dashboard.html">
+<span class="material-symbols-outlined">monitoring</span>
+<p class="text-sm font-medium leading-normal">Métricas del sistema</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="_chat.html">
+<span class="material-symbols-outlined">chat</span>
+<p class="text-sm font-medium leading-normal">Mensajes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="#configuracion">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Configuración</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer" href="__faq.html">
+<span class="material-symbols-outlined">support_agent</span>
+<p class="text-sm font-medium leading-normal">Soporte</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-subtext-light dark:text-subtext-dark cursor-pointer" href="privacy_policy.html">
+<span class="material-symbols-outlined text-sm">shield</span>
+<p class="text-xs font-medium">Política de privacidad</p>
+</a>
+<div class="flex items-center gap-3 px-3 py-2 text-subtext-light dark:text-subtext-dark">
+<span class="material-symbols-outlined text-sm">copyright</span>
+<p class="text-xs font-medium">MIT © 2025</p>
+</div>
+</div>
+</aside>
+
+<main class="flex-1">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-8 py-4 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+<h1 class="text-xl font-bold text-text-light dark:text-text-dark">Panel del Administrador General</h1>
+<div class="flex items-center gap-4">
+<button onclick="window.location.href='notification_center.html'" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-container-light dark:bg-container-dark text-text-light dark:text-text-dark border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-container-light dark:bg-container-dark text-text-light dark:text-text-dark border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button id="logoutBtn" class="logout-button flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-container-light dark:bg-container-dark text-text-light dark:text-text-dark border border-border-light dark:border-border-dark hover:bg-primary/10 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined">logout</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer hover:ring-2 hover:ring-primary transition-all" data-alt="Admin user avatar" style='background-image: url("https://ui-avatars.com/api/?name=Admin&background=0E7C7B&color=fff");'></div>
+</div>
+</header>
+
+<!-- Dashboard Principal -->
+<div id="dashboard" class="p-8">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between gap-3 pb-6">
+<p class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em]">Resumen general</p>
+</div>
+
+<!-- Alert -->
+<div class="flex items-center p-4 mb-6 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+<span class="material-symbols-outlined mr-3">error</span>
+<div>
+<span class="font-medium">Alerta Crítica:</span> Integración con Hospital La Paz no responde (API timeout).
+</div>
+</div>
+
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-container-light dark:bg-container-dark border border-border-light dark:border-border-dark hover:shadow-lg transition-shadow cursor-pointer">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium leading-normal">Total de usuarios</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-3xl font-bold leading-tight">1,234</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-container-light dark:bg-container-dark border border-border-light dark:border-border-dark hover:shadow-lg transition-shadow cursor-pointer">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium leading-normal">Total de citas</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-3xl font-bold leading-tight">5,678</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-container-light dark:bg-container-dark border border-border-light dark:border-border-dark hover:shadow-lg transition-shadow cursor-pointer">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium leading-normal">Citas activas hoy</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-3xl font-bold leading-tight">45</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-container-light dark:bg-container-dark border border-border-light dark:border-border-dark hover:shadow-lg transition-shadow cursor-pointer">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium leading-normal">Tiempo medio de espera</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-3xl font-bold leading-tight">15 min</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-container-light dark:bg-container-dark border border-border-light dark:border-border-dark hover:shadow-lg transition-shadow cursor-pointer">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-medium leading-normal">Uptime del sistema</p>
+<p class="text-accent tracking-tight text-3xl font-bold leading-tight">99.9%</p>
+</div>
+</div>
+
+<!-- Charts -->
+<div class="flex flex-wrap gap-6 mt-6">
+<div class="flex w-full flex-col gap-4 rounded-xl border border-border-light dark:border-border-dark bg-container-light dark:bg-container-dark p-6">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-text-light dark:text-text-dark text-lg font-medium leading-normal">Evolución de Actividad Semanal</p>
+<div class="flex gap-2 items-baseline">
+<p class="text-subtext-light dark:text-subtext-dark text-sm font-normal">Últimos 7 días</p>
+<p class="text-accent text-sm font-medium">+2.1%</p>
+</div>
+</div>
+<p class="text-text-light dark:text-text-dark tracking-tight text-4xl font-bold leading-tight truncate">+5%</p>
+</div>
+<div class="flex min-h-[220px] flex-1 flex-col gap-8 py-4">
+<svg fill="none" height="100%" preserveaspectratio="none" viewbox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_chart)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#0E7C7B" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="paint0_linear_chart" x1="236" x2="236" y1="1" y2="149">
+<stop stop-color="#0E7C7B" stop-opacity="0.3"></stop>
+<stop offset="1" stop-color="#0E7C7B" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="flex justify-around">
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Lun</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Mar</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Mié</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Jue</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Vie</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Sáb</p>
+<p class="text-subtext-light dark:text-subtext-dark text-xs font-bold uppercase tracking-wider">Dom</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- NUEVO: Timeline de Actividades del Sistema -->
+<div class="p-8 mt-8">
+<div class="bg-container-light dark:bg-container-dark rounded-xl border border-border-light dark:border-border-dark p-6">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h2 class="text-text-light dark:text-text-dark text-2xl font-black">Timeline de Actividades</h2>
+<p class="text-subtext-light dark:text-subtext-dark text-sm mt-1">Registro en tiempo real de eventos del sistema</p>
+</div>
+<div class="flex gap-2">
+<select id="timeline-type-filter" onchange="filterTimeline()" class="rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-3 py-2 text-sm">
+<option value="all">Todos los eventos</option>
+<option value="user">👤 Usuarios</option>
+<option value="appointment">📅 Citas</option>
+<option value="center">🏥 Centros</option>
+<option value="payment">💳 Pagos</option>
+<option value="error">⚠️ Errores</option>
+</select>
+<input type="date" id="timeline-date-filter" onchange="filterTimeline()" class="rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-3 py-2 text-sm"/>
+</div>
+</div>
+
+<!-- Timeline Container -->
+<div id="timeline-container" class="space-y-4 max-h-[500px] overflow-y-auto pr-4">
+<!-- Los eventos se insertan aquí dinámicamente -->
+</div>
+</div>
+</div>
+
+<!-- Gestión de Roles y Permisos -->
+<div id="roles-permisos" class="p-8 border-t border-border-light dark:border-border-dark mt-8">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+<h2 class="text-text-light dark:text-text-dark text-4xl font-black tracking-tighter">Roles y Permisos</h2>
+</div>
+
+<!-- Definiciones de Roles (Primero) -->
+<div class="flex flex-col gap-4 p-6 bg-container-light dark:bg-container-dark rounded-lg mb-8 border border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold">Definiciones de Roles</h2>
+<p class="text-sm text-text-light/80 dark:text-text-dark/80 mt-1">Listado de roles definidos con una breve descripción de sus permisos.</p>
+</div>
+<button onclick="openEditRolesModal()" class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined mr-2">edit</span>
+<span>Editar Roles Definidos</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+<div class="bg-background-light dark:bg-background-dark p-4 rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+<h3 class="font-bold text-text-light dark:text-text-dark">Admin del Sistema</h3>
+<p class="text-xs mt-1 text-text-light/70 dark:text-text-dark/70">Acceso total al panel, gestión de usuarios y centros.</p>
+</div>
+<div class="bg-background-light dark:bg-background-dark p-4 rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+<h3 class="font-bold text-text-light dark:text-text-dark">Admin de Centro</h3>
+<p class="text-xs mt-1 text-text-light/70 dark:text-text-dark/70">Gestiona profesionales y citas de un centro específico.</p>
+</div>
+<div class="bg-background-light dark:bg-background-dark p-4 rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+<h3 class="font-bold text-text-light dark:text-text-dark">Médico</h3>
+<p class="text-xs mt-1 text-text-light/70 dark:text-text-dark/70">Gestiona su propia agenda, citas y ve historial de pacientes.</p>
+</div>
+<div class="bg-background-light dark:bg-background-dark p-4 rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+<h3 class="font-bold text-text-light dark:text-text-dark">Paciente</h3>
+<p class="text-xs mt-1 text-text-light/70 dark:text-text-dark/70">Puede reservar, ver y cancelar sus propias citas.</p>
+</div>
+</div>
+</div>
+
+<!-- Usuarios del Sistema (Después) -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+<h2 class="text-text-light dark:text-text-dark text-2xl font-bold">Usuarios del Sistema</h2>
+<div class="flex items-center gap-4">
+<div class="w-72">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-text-light/60 dark:text-text-dark/60 flex bg-container-light dark:bg-container-dark items-center justify-center pl-4 rounded-l-lg border-r-0 border border-border-light dark:border-border-dark">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input id="search-users" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-container-light dark:bg-container-dark h-full placeholder:text-text-light/60 dark:placeholder:text-text-dark/60 px-4 pl-2 text-base font-normal" placeholder="Buscar por nombre, email o rol"/>
+</div>
+</label>
+</div>
+<button onclick="openAddUserModal()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white gap-2 text-base font-bold tracking-wide hover:bg-primary/90">
+<span class="material-symbols-outlined">add</span>
+<span>Añadir Nuevo Usuario</span>
+</button>
+</div>
+</div>
+
+<div class="overflow-x-auto bg-container-light dark:bg-container-dark rounded-lg border border-border-light dark:border-border-dark">
+<table class="w-full text-sm text-left">
+<thead class="text-xs uppercase bg-background-light dark:bg-background-dark">
+<tr>
+<th class="px-6 py-3" scope="col">Nombre de Usuario</th>
+<th class="px-6 py-3" scope="col">Correo Electrónico</th>
+<th class="px-6 py-3" scope="col">Rol Actual</th>
+<th class="px-6 py-3" scope="col">Especialidad</th>
+<th class="px-6 py-3" scope="col">Último Acceso</th>
+<th class="px-6 py-3 text-right" scope="col">Acciones</th>
+</tr>
+</thead>
+<tbody id="users-table-body">
+<!-- Los usuarios se cargarán dinámicamente -->
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- Gestión de Centros Médicos -->
+<div id="centros-medicos" class="p-8 border-t border-border-light dark:border-border-dark mt-8">
+<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<div class="flex flex-col gap-2">
+<h1 class="text-text-light dark:text-text-dark text-3xl font-black leading-tight tracking-[-0.03em]">Gestión de Centros Médicos</h1>
+<p class="text-subtext-light dark:text-subtext-dark text-base font-normal leading-normal">Añade, edita y gestiona los detalles de los centros médicos registrados en la plataforma.</p>
+</div>
+<div class="flex gap-2">
+<button onclick="openMapModal()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] gap-2 hover:bg-accent/90">
+<span class="material-symbols-outlined text-base">map</span>
+<span class="truncate">Ver Mapa de Centros</span>
+</button>
+<button onclick="openAddCenterModal()" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] gap-2 hover:bg-primary/90">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span class="truncate">Añadir Nuevo Centro</span>
+</button>
+</div>
+</div>
+
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-6">
+<div class="pb-4">
+<label class="flex flex-col min-w-40 h-12 w-full max-w-md">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus-within:ring-2 focus-within:ring-primary">
+<div class="text-subtext-light dark:text-subtext-dark flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input id="search-centers" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-text-light dark:text-text-dark focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-subtext-light/60 px-2 text-base font-normal leading-normal" placeholder="Buscar por nombre o dirección..."/>
+</div>
+</label>
+</div>
+
+<div class="overflow-x-auto">
+<div class="inline-block min-w-full align-middle">
+<div class="overflow-hidden rounded-lg border border-border-light dark:border-border-dark">
+<table class="min-w-full divide-y divide-border-light dark:divide-border-dark">
+<thead class="bg-background-light dark:bg-background-dark/80">
+<tr>
+<th class="px-4 py-3 text-left text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Nombre del Centro</th>
+<th class="px-4 py-3 text-left text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Tipo</th>
+<th class="px-4 py-3 text-left text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Dirección</th>
+<th class="px-4 py-3 text-left text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Servicios</th>
+<th class="px-4 py-3 text-left text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Estado</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-subtext-light dark:text-subtext-dark uppercase tracking-wider" scope="col">Acciones</th>
+</tr>
+</thead>
+<tbody id="centers-table-body" class="bg-container-light dark:bg-container-dark divide-y divide-border-light dark:divide-border-dark">
+<!-- Los centros se cargarán dinámicamente -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Configuración (placeholder) -->
+<div id="configuracion" class="p-8 border-t border-border-light dark:border-border-dark mt-8">
+<h2 class="text-text-light dark:text-text-dark text-3xl font-black tracking-tighter mb-4">Configuración del Sistema</h2>
+<p class="text-subtext-light dark:text-subtext-dark">Panel de configuración en desarrollo...</p>
+</div>
+
+</main>
+</div>
+</div>
+
+<!-- Modal: Editar Usuario -->
+<div id="edit-user-modal" class="modal fixed inset-0 z-50 bg-black/50 items-center justify-center">
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-2xl p-8 w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-start mb-6">
+<h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Editar Usuario</h2>
+<button onclick="closeEditUserModal()" class="p-2 rounded-full hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form onsubmit="saveUser(event)" class="space-y-4">
+<input type="hidden" id="edit-user-id"/>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="edit-user-name">Nombre completo</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="edit-user-name" type="text" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="edit-user-email">Correo electrónico</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="edit-user-email" type="email" required/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="edit-user-role">Asignar Rol</label>
+<select class="form-select w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="edit-user-role" required>
+<option value="Paciente">Paciente</option>
+<option value="Médico">Médico / Especialista</option>
+<option value="Admin de Centro">Administrador de Centro</option>
+<option value="Admin del Sistema">Administrador del Sistema</option>
+</select>
+</div>
+<div id="edit-specialty-container" class="hidden">
+<label class="block text-sm font-medium mb-1" for="edit-user-specialty">Especialidad</label>
+<select class="form-select w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="edit-user-specialty">
+<option value="">Seleccionar especialidad...</option>
+<option value="Cardiología">Cardiología</option>
+<option value="Dermatología">Dermatología</option>
+<option value="Pediatría">Pediatría</option>
+<option value="Neurología">Neurología</option>
+<option value="Traumatología">Traumatología</option>
+<option value="Oftalmología">Oftalmología</option>
+<option value="Ginecología">Ginecología</option>
+<option value="Medicina General">Medicina General</option>
+</select>
+</div>
+</div>
+<div class="border-t border-border-light dark:border-border-dark pt-4">
+<h3 class="text-lg font-semibold mb-2">Permisos del Rol</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark mb-4">Los siguientes permisos están asociados con el rol seleccionado:</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3" id="permissions-list">
+<!-- Los permisos se cargarán dinámicamente según el rol -->
+</div>
+</div>
+<div class="flex justify-end gap-3 pt-4">
+<button type="button" onclick="closeEditUserModal()" class="px-6 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+Cancelar
+</button>
+<button type="submit" class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+Guardar Cambios
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Modal: Añadir Usuario -->
+<div id="add-user-modal" class="modal fixed inset-0 z-50 bg-black/50 items-center justify-center">
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-2xl p-8 w-full max-w-md m-4">
+<div class="flex justify-between items-start mb-6">
+<h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Añadir Nuevo Usuario</h2>
+<button onclick="closeAddUserModal()" class="p-2 rounded-full hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form onsubmit="addUser(event)" class="space-y-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="new-user-name">Nombre completo</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-user-name" type="text" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-user-email">Correo electrónico</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-user-email" type="email" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-user-password">Contraseña (inicial)</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-user-password" type="password" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-user-role">Asignar Rol</label>
+<select class="form-select w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-user-role" required>
+<option value="Paciente">Paciente</option>
+<option value="Médico">Médico</option>
+<option value="Admin de Centro">Admin de Centro</option>
+<option value="Admin del Sistema">Admin del Sistema</option>
+</select>
+</div>
+<div id="new-specialty-container" class="hidden">
+<label class="block text-sm font-medium mb-1" for="new-user-specialty">Especialidad</label>
+<select class="form-select w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-user-specialty">
+<option value="">Seleccionar especialidad...</option>
+<option value="Cardiología">Cardiología</option>
+<option value="Dermatología">Dermatología</option>
+<option value="Pediatría">Pediatría</option>
+<option value="Neurología">Neurología</option>
+<option value="Traumatología">Traumatología</option>
+<option value="Oftalmología">Oftalmología</option>
+<option value="Ginecología">Ginecología</option>
+<option value="Medicina General">Medicina General</option>
+</select>
+</div>
+<div class="flex justify-end gap-3 pt-4">
+<button type="button" onclick="closeAddUserModal()" class="px-6 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+Cancelar
+</button>
+<button type="submit" class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+Crear Usuario
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Modal: Añadir Centro Médico -->
+<div id="add-center-modal" class="modal fixed inset-0 z-50 bg-black/50 items-center justify-center">
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-2xl p-8 w-full max-w-3xl m-4 max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-start mb-6">
+<h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Añadir Nuevo Centro Médico</h2>
+<button onclick="closeAddCenterModal()" class="p-2 rounded-full hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form onsubmit="addCenter(event)" class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-name">Nombre del Centro *</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-name" type="text" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-type">Tipo de Centro *</label>
+<select class="form-select w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-type" required>
+<option value="Público">Público</option>
+<option value="Privado">Privado</option>
+<option value="Mixto">Mixto</option>
+</select>
+</div>
+</div>
+
+<!-- Dirección Completa -->
+<div class="border-t border-border-light dark:border-border-dark pt-4">
+<h3 class="text-lg font-semibold mb-4">Dirección del Centro</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-address-1">Línea de dirección 1 *</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-address-1" type="text" placeholder="Calle, número..." required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-address-2">Línea de dirección 2</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-address-2" type="text" placeholder="Piso, puerta, edificio... (opcional)"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-postal">Código Postal *</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-postal" type="text" placeholder="28001" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-city">Ciudad *</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-city" type="text" placeholder="Madrid" required/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1" for="new-center-province">Provincia *</label>
+<input class="form-input w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" id="new-center-province" type="text" placeholder="Madrid" required/>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Servicios con Checkboxes -->
+<div class="border-t border-border-light dark:border-border-dark pt-4">
+<h3 class="text-lg font-semibold mb-4">Servicios Disponibles *</h3>
+<p class="text-sm text-subtext-light dark:text-subtext-dark mb-3">Selecciona los servicios que ofrece el centro:</p>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Cardiología"/>
+<span class="text-sm">Cardiología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Dermatología"/>
+<span class="text-sm">Dermatología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Pediatría"/>
+<span class="text-sm">Pediatría</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Neurología"/>
+<span class="text-sm">Neurología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Traumatología"/>
+<span class="text-sm">Traumatología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Oftalmología"/>
+<span class="text-sm">Oftalmología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Urgencias"/>
+<span class="text-sm">Urgencias</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Laboratorio"/>
+<span class="text-sm">Laboratorio</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Radiología"/>
+<span class="text-sm">Radiología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Cirugía"/>
+<span class="text-sm">Cirugía</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Ginecología"/>
+<span class="text-sm">Ginecología</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary" name="service" value="Rehabilitación"/>
+<span class="text-sm">Rehabilitación</span>
+</label>
+</div>
+</div>
+
+<div class="flex justify-end gap-3 pt-4">
+<button type="button" onclick="closeAddCenterModal()" class="px-6 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+Cancelar
+</button>
+<button type="submit" class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+Crear Centro
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Modal: Editar Roles -->
+<div id="edit-roles-modal" class="modal fixed inset-0 z-50 bg-black/50 items-center justify-center">
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-2xl p-8 w-full max-w-4xl m-4 max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-start mb-6">
+<h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Editar Definiciones de Roles</h2>
+<button onclick="closeEditRolesModal()" class="p-2 rounded-full hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form onsubmit="saveRoles(event)" class="space-y-6">
+<div class="space-y-4">
+<!-- Admin del Sistema -->
+<div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
+<h3 class="font-bold text-lg mb-2">Admin del Sistema</h3>
+<textarea class="form-textarea w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" rows="2" placeholder="Descripción del rol...">Acceso total al panel, gestión de usuarios y centros.</textarea>
+</div>
+<!-- Admin de Centro -->
+<div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
+<h3 class="font-bold text-lg mb-2">Admin de Centro</h3>
+<textarea class="form-textarea w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" rows="2" placeholder="Descripción del rol...">Gestiona profesionales y citas de un centro específico.</textarea>
+</div>
+<!-- Médico -->
+<div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
+<h3 class="font-bold text-lg mb-2">Médico</h3>
+<textarea class="form-textarea w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" rows="2" placeholder="Descripción del rol...">Gestiona su propia agenda, citas y ve historial de pacientes.</textarea>
+</div>
+<!-- Paciente -->
+<div class="p-4 border border-border-light dark:border-border-dark rounded-lg">
+<h3 class="font-bold text-lg mb-2">Paciente</h3>
+<textarea class="form-textarea w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary" rows="2" placeholder="Descripción del rol...">Puede reservar, ver y cancelar sus propias citas.</textarea>
+</div>
+</div>
+<div class="flex justify-end gap-3 pt-4">
+<button type="button" onclick="closeEditRolesModal()" class="px-6 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+Cancelar
+</button>
+<button type="submit" class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+Guardar Cambios
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- NUEVO: Modal de Mapa Interactivo -->
+<div id="map-modal" class="modal fixed inset-0 z-50 bg-black/50 items-center justify-center">
+<div class="bg-container-light dark:bg-container-dark rounded-xl shadow-2xl p-6 w-full max-w-6xl m-4 max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-start mb-4">
+<h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Mapa de Centros Médicos</h2>
+<button onclick="closeMapModal()" class="p-2 rounded-full hover:bg-background-light dark:hover:bg-background-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="bg-background-light dark:bg-background-dark rounded-lg overflow-hidden border border-border-light dark:border-border-dark">
+<!-- Mapa simulado con HTML/CSS -->
+<div id="interactive-map" class="relative h-[600px] bg-gray-100 dark:bg-gray-900">
+<!-- Mapa base -->
+<div class="absolute inset-0 flex items-center justify-center text-gray-400">
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="url(#grid)" />
+</svg>
+</div>
+
+<!-- Pins de centros médicos -->
+<div id="map-pins-container" class="absolute inset-0">
+<!-- Los pins se insertan aquí dinámicamente -->
+</div>
+</div>
+
+<!-- Leyenda del mapa -->
+<div class="p-4 bg-white dark:bg-gray-800 border-t border-border-light dark:border-border-dark">
+<div class="flex gap-6 items-center justify-center text-sm">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-green-500 rounded-full"></span>
+<span class="text-gray-600 dark:text-gray-400">Activo</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+<span class="text-gray-600 dark:text-gray-400">Parcial</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-red-500 rounded-full"></span>
+<span class="text-gray-600 dark:text-gray-400">Inactivo</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// ==================== DATOS DE EJEMPLO ====================
+let users = [
+    { id: 1, name: "Dr. Ana Torres", email: "ana.torres@medmail.com", role: "Médico", specialty: "Cardiología", lastAccess: "2023-10-26 10:00 AM" },
+    { id: 2, name: "Carlos Ruiz", email: "carlos.ruiz@patient.com", role: "Paciente", specialty: "", lastAccess: "2023-10-25 03:45 PM" },
+    { id: 3, name: "Laura Gómez", email: "laura.gomez@clinicadmin.com", role: "Admin de Centro", specialty: "", lastAccess: "2023-10-26 09:15 AM" },
+    { id: 4, name: "Miguel Admin", email: "miguel.admin@sys.com", role: "Admin del Sistema", specialty: "", lastAccess: "2023-10-26 11:30 AM" },
+    { id: 5, name: "Dr. Pedro Martínez", email: "pedro.martinez@medmail.com", role: "Médico", specialty: "Pediatría", lastAccess: "2023-10-27 09:30 AM" }
+];
+
+let centers = [
+    { id: 1, name: "Hospital Central de Madrid", type: "Público", address: "Calle de la Salud, 1, 28001 Madrid, Madrid", services: ["Cardiología", "Urgencias", "Laboratorio"], status: "Activo" },
+    { id: 2, name: "Clínica Privada Bienestar", type: "Privado", address: "Avenida de la Vida, 25, 08001 Barcelona, Barcelona", services: ["Dermatología", "Pediatría"], status: "Activo" },
+    { id: 3, name: "Centro Médico Sur", type: "Privado", address: "Plaza Mayor, 10, 41001 Sevilla, Sevilla", services: ["Cardiología", "Pediatría"], status: "Inactivo" }
+];
+
+const rolePermissions = {
+    "Paciente": ["Reservar citas", "Ver historial médico", "Cancelar citas", "Recibir notificaciones"],
+    "Médico": ["Acceder a Dashboard de Médico", "Gestionar Órdenes Médicas", "Ver Citas de Pacientes", "Consultar Disponibilidad de Centros", "Gestionar Perfil de Médico", "Enviar Mensajes"],
+    "Admin de Centro": ["Gestionar profesionales del centro", "Ver reportes del centro", "Gestionar horarios", "Administrar recursos"],
+    "Admin del Sistema": ["Acceso total al panel", "Gestión de usuarios y centros", "Ver todas las métricas", "Configuración del sistema", "Auditorías y logs"]
+};
+
+// ==================== FUNCIONES DE USUARIOS ====================
+function renderUsers() {
+    const tbody = document.getElementById('users-table-body');
+    const searchTerm = document.getElementById('search-users').value.toLowerCase();
+    
+    const filteredUsers = users.filter(user => 
+        user.name.toLowerCase().includes(searchTerm) || 
+        user.email.toLowerCase().includes(searchTerm) || 
+        user.role.toLowerCase().includes(searchTerm) ||
+        (user.specialty && user.specialty.toLowerCase().includes(searchTerm))
+    );
+    
+    tbody.innerHTML = filteredUsers.map(user => {
+        const roleColors = {
+            "Médico": "bg-primary/20 text-primary",
+            "Paciente": "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300",
+            "Admin de Centro": "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300",
+            "Admin del Sistema": "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300"
+        };
+        
+        return `
+            <tr class="border-b border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark/50">
+                <td class="px-6 py-4 font-medium">${escapeHtml(user.name)}</td>
+                <td class="px-6 py-4">${escapeHtml(user.email)}</td>
+                <td class="px-6 py-4">
+                    <span class="${roleColors[user.role]} text-xs font-medium px-2.5 py-0.5 rounded-full">${escapeHtml(user.role)}</span>
+                </td>
+                <td class="px-6 py-4">${escapeHtml(user.specialty || '-')}</td>
+                <td class="px-6 py-4">${escapeHtml(user.lastAccess)}</td>
+                <td class="px-6 py-4 text-right">
+                    <button onclick="openEditUserModal(${user.id})" class="p-2 rounded-full hover:bg-primary/20">
+                        <span class="material-symbols-outlined text-lg">edit</span>
+                    </button>
+                    <button onclick="deleteUser(${user.id})" class="p-2 rounded-full hover:bg-red-500/20">
+                        <span class="material-symbols-outlined text-lg text-red-500">delete</span>
+                    </button>
+                </td>
+            </tr>
+        `; // XSS-SAFE: Todos los campos de usuario sanitizados
+    }).join('');
+}
+
+function openEditUserModal(userId) {
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
+    
+    document.getElementById('edit-user-id').value = user.id;
+    document.getElementById('edit-user-name').value = user.name;
+    document.getElementById('edit-user-email').value = user.email;
+    document.getElementById('edit-user-role').value = user.role;
+    document.getElementById('edit-user-specialty').value = user.specialty || '';
+    
+    // Mostrar campo de especialidad si es médico
+    toggleSpecialtyField('edit', user.role);
+    
+    updatePermissions(user.role);
+    document.getElementById('edit-user-modal').classList.add('active');
+}
+
+function closeEditUserModal() {
+    document.getElementById('edit-user-modal').classList.remove('active');
+}
+
+function saveUser(event) {
+    event.preventDefault();
+    
+    const userId = parseInt(document.getElementById('edit-user-id').value);
+    const name = document.getElementById('edit-user-name').value;
+    const email = document.getElementById('edit-user-email').value;
+    const role = document.getElementById('edit-user-role').value;
+    const specialty = document.getElementById('edit-user-specialty').value;
+    
+    const userIndex = users.findIndex(u => u.id === userId);
+    if (userIndex !== -1) {
+        users[userIndex] = { ...users[userIndex], name, email, role, specialty };
+        renderUsers();
+        closeEditUserModal();
+        showNotification('Usuario actualizado correctamente', 'success');
+    }
+}
+
+function openAddUserModal() {
+    document.getElementById('add-user-modal').classList.add('active');
+}
+
+function closeAddUserModal() {
+    document.getElementById('add-user-modal').classList.remove('active');
+    document.getElementById('new-user-name').value = '';
+    document.getElementById('new-user-email').value = '';
+    document.getElementById('new-user-password').value = '';
+    document.getElementById('new-user-role').value = 'Paciente';
+    document.getElementById('new-user-specialty').value = '';
+    toggleSpecialtyField('new', 'Paciente');
+}
+
+function addUser(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('new-user-name').value;
+    const email = document.getElementById('new-user-email').value;
+    const role = document.getElementById('new-user-role').value;
+    const specialty = document.getElementById('new-user-specialty').value;
+    
+    const newUser = {
+        id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+        name,
+        email,
+        role,
+        specialty: role === 'Médico' ? specialty : '',
+        lastAccess: new Date().toLocaleString('es-ES')
+    };
+    
+    users.push(newUser);
+    renderUsers();
+    closeAddUserModal();
+    showNotification('Usuario creado correctamente', 'success');
+}
+
+function deleteUser(userId) {
+    if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+        users = users.filter(u => u.id !== userId);
+        renderUsers();
+        showNotification('Usuario eliminado correctamente', 'success');
+    }
+}
+
+function updatePermissions(role) {
+    const permissionsList = document.getElementById('permissions-list');
+    const permissions = rolePermissions[role] || [];
+    
+    permissionsList.innerHTML = permissions.map(permission => `
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+            <span class="text-sm">${permission}</span>
+        </div>
+    `).join('');
+}
+
+function toggleSpecialtyField(prefix, role) {
+    const container = document.getElementById(`${prefix}-specialty-container`);
+    if (role === 'Médico') {
+        container.classList.remove('hidden');
+        document.getElementById(`${prefix}-user-specialty`).required = true;
+    } else {
+        container.classList.add('hidden');
+        document.getElementById(`${prefix}-user-specialty`).required = false;
+    }
+}
+
+// Event listeners para actualizar permisos y especialidad cuando cambia el rol
+document.getElementById('edit-user-role').addEventListener('change', (e) => {
+    updatePermissions(e.target.value);
+    toggleSpecialtyField('edit', e.target.value);
+});
+
+document.getElementById('new-user-role').addEventListener('change', (e) => {
+    toggleSpecialtyField('new', e.target.value);
+});
+
+// ==================== FUNCIONES DE CENTROS MÉDICOS ====================
+function renderCenters() {
+    const tbody = document.getElementById('centers-table-body');
+    const searchTerm = document.getElementById('search-centers').value.toLowerCase();
+    
+    const filteredCenters = centers.filter(center => 
+        center.name.toLowerCase().includes(searchTerm) || 
+        center.address.toLowerCase().includes(searchTerm)
+    );
+    
+    tbody.innerHTML = filteredCenters.map(center => `
+        <tr class="hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors">
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-text-light dark:text-text-dark">${escapeHtml(center.name)}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm text-subtext-light dark:text-subtext-dark">${escapeHtml(center.type)}</td>
+            <td class="px-4 py-4 text-sm text-subtext-light dark:text-subtext-dark">${escapeHtml(center.address)}</td>
+            <td class="px-4 py-4 text-sm text-subtext-light dark:text-subtext-dark">${escapeHtml(Array.isArray(center.services) ? center.services.join(', ') : center.services)}</td>
+            <td class="px-4 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${center.status === 'Activo' ? 'bg-accent/20 text-accent' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}">${escapeHtml(center.status)}</span>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex items-center justify-end gap-3">
+                    <button onclick="editCenter(${center.id})" class="text-primary/80 hover:text-primary" title="Editar">
+                        <span class="material-symbols-outlined text-xl">edit</span>
+                    </button>
+                    <button onclick="toggleCenterStatus(${center.id})" class="text-primary/80 hover:text-primary" title="${center.status === 'Activo' ? 'Desactivar' : 'Activar'}">
+                        <span class="material-symbols-outlined text-xl">${center.status === 'Activo' ? 'toggle_on' : 'toggle_off'}</span>
+                    </button>
+                    <button onclick="deleteCenter(${center.id})" class="text-red-500/80 hover:text-red-600" title="Eliminar">
+                        <span class="material-symbols-outlined text-xl">delete</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openAddCenterModal() {
+    document.getElementById('add-center-modal').classList.add('active');
+}
+
+function closeAddCenterModal() {
+    document.getElementById('add-center-modal').classList.remove('active');
+    // Reset form
+    document.querySelectorAll('#add-center-modal input, #add-center-modal select, #add-center-modal textarea').forEach(el => {
+        if (el.type === 'checkbox') {
+            el.checked = false;
+        } else {
+            el.value = '';
+        }
+    });
+}
+
+function addCenter(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('new-center-name').value;
+    const type = document.getElementById('new-center-type').value;
+    const address1 = document.getElementById('new-center-address-1').value;
+    const address2 = document.getElementById('new-center-address-2').value;
+    const postal = document.getElementById('new-center-postal').value;
+    const city = document.getElementById('new-center-city').value;
+    const province = document.getElementById('new-center-province').value;
+    
+    // Construir dirección completa
+    let fullAddress = address1;
+    if (address2) fullAddress += `, ${address2}`;
+    fullAddress += `, ${postal} ${city}, ${province}`;
+    
+    // Obtener servicios seleccionados
+    const selectedServices = Array.from(document.querySelectorAll('input[name="service"]:checked'))
+        .map(checkbox => checkbox.value);
+    
+    if (selectedServices.length === 0) {
+        showNotification('Debes seleccionar al menos un servicio', 'warning');
+        return;
+    }
+    
+    const newCenter = {
+        id: centers.length > 0 ? Math.max(...centers.map(c => c.id)) + 1 : 1,
+        name,
+        type,
+        address: fullAddress,
+        services: selectedServices,
+        status: 'Activo'
+    };
+    
+    centers.push(newCenter);
+    renderCenters();
+    closeAddCenterModal();
+    showNotification('Centro médico creado correctamente', 'success');
+}
+
+function editCenter(centerId) {
+    showNotification('Función de edición en desarrollo', 'info');
+}
+
+function toggleCenterStatus(centerId) {
+    const center = centers.find(c => c.id === centerId);
+    if (center) {
+        center.status = center.status === 'Activo' ? 'Inactivo' : 'Activo';
+        renderCenters();
+        showNotification(`Centro ${center.status === 'Activo' ? 'activado' : 'desactivado'} correctamente`, 'success');
+    }
+}
+
+function deleteCenter(centerId) {
+    if (confirm('¿Estás seguro de que deseas eliminar este centro médico?')) {
+        centers = centers.filter(c => c.id !== centerId);
+        renderCenters();
+        showNotification('Centro médico eliminado correctamente', 'success');
+    }
+}
+
+// ==================== FUNCIONES DE ROLES ====================
+function openEditRolesModal() {
+    document.getElementById('edit-roles-modal').classList.add('active');
+}
+
+function closeEditRolesModal() {
+    document.getElementById('edit-roles-modal').classList.remove('active');
+}
+
+function saveRoles(event) {
+    event.preventDefault();
+    showNotification('Definiciones de roles actualizadas correctamente', 'success');
+    closeEditRolesModal();
+}
+
+// ==================== FUNCIONES AUXILIARES ====================
+function showNotification(message, type = 'info') {
+    const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        info: 'bg-blue-500',
+        warning: 'bg-yellow-500'
+    };
+    
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+function logout() {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        showNotification('Cerrando sesión...', 'info');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+    }
+}
+
+// ==================== NUEVO: FUNCIONES DEL MAPA ====================
+function openMapModal() {
+    document.getElementById('map-modal').classList.add('active');
+    setTimeout(() => renderMapPins(), 100);
+}
+
+function closeMapModal() {
+    document.getElementById('map-modal').classList.remove('active');
+}
+
+function renderMapPins() {
+    const container = document.getElementById('map-pins-container');
+    
+    // Posiciones simuladas de centros (% del contenedor)
+    const centerPositions = [
+        { center: centers[0], x: 30, y: 35 },
+        { center: centers[1], x: 65, y: 25 },
+        { center: centers[2], x: 45, y: 60 }
+    ];
+    
+    container.innerHTML = centerPositions.map((pos, index) => {
+        const statusColor = pos.center.status === 'Activo' ? 'bg-green-500' : 'bg-red-500';
+        
+        return `
+            <div class="absolute cursor-pointer group" style="left: ${pos.x}%; top: ${pos.y}%; transform: translate(-50%, -100%); animation: bounce 1s ease-in-out ${index * 0.2}s 3;">
+                <!-- Pin -->
+                <div class="relative">
+                    <svg width="40" height="50" viewBox="0 0 40 50">
+                        <path d="M20 0C9 0 0 9 0 20C0 35 20 50 20 50S40 35 40 20C40 9 31 0 20 0Z" class="fill-primary" />
+                        <circle cx="20" cy="20" r="8" class="fill-white" />
+                        <circle cx="20" cy="20" r="5" class="${statusColor}" />
+                    </svg>
+                    
+                    <!-- Info card on hover -->
+                    <div class="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-border-light dark:border-border-dark p-4 z-10">
+                        <h4 class="font-bold text-text-light dark:text-text-dark mb-2">${pos.center.name}</h4>
+                        <div class="text-sm space-y-1">
+                            <p class="text-gray-600 dark:text-gray-400">
+                                <strong>Tipo:</strong> ${pos.center.type}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                <strong>Dirección:</strong> ${pos.center.address}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                <strong>Servicios:</strong> ${pos.center.services.join(', ')}
+                            </p>
+                            <span class="inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full ${pos.center.status === 'Activo' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-200'}">
+                                ${pos.center.status}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ==================== EVENT LISTENERS ====================
+document.getElementById('search-users').addEventListener('input', renderUsers);
+document.getElementById('search-centers').addEventListener('input', renderCenters);
+
+// Cerrar modales al hacer clic fuera
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+});
+
+// ==================== NUEVO: TIMELINE DE ACTIVIDADES ====================
+
+// Data simulada de eventos del sistema
+let timelineEvents = [
+    { id: 1, type: 'user', severity: 'success', icon: 'person_add', title: 'Nuevo usuario registrado', description: 'María González se ha registrado como paciente', time: new Date(Date.now() - 5 * 60000), date: new Date(Date.now() - 5 * 60000) },
+    { id: 2, type: 'appointment', severity: 'success', icon: 'calendar_add_on', title: 'Cita creada', description: 'Nueva cita de Cardiología en Hospital Central', time: new Date(Date.now() - 15 * 60000), date: new Date(Date.now() - 15 * 60000) },
+    { id: 3, type: 'payment', severity: 'success', icon: 'payments', title: 'Pago completado', description: 'Pago de 48.40€ procesado correctamente', time: new Date(Date.now() - 30 * 60000), date: new Date(Date.now() - 30 * 60000) },
+    { id: 4, type: 'center', severity: 'info', icon: 'domain', title: 'Centro médico actualizado', description: 'Hospital San José actualizó sus servicios', time: new Date(Date.now() - 60 * 60000), date: new Date(Date.now() - 60 * 60000) },
+    { id: 5, type: 'error', severity: 'error', icon: 'error', title: 'Error de conexión', description: 'API timeout con Hospital La Paz', time: new Date(Date.now() - 90 * 60000), date: new Date(Date.now() - 90 * 60000) },
+    { id: 6, type: 'user', severity: 'warning', icon: 'person_remove', title: 'Usuario desactivado', description: 'Cuenta de prueba desactivada por inactividad', time: new Date(Date.now() - 120 * 60000), date: new Date(Date.now() - 120 * 60000) },
+    { id: 7, type: 'appointment', severity: 'warning', icon: 'event_busy', title: 'Cita cancelada', description: 'Paciente canceló cita de Dermatología', time: new Date(Date.now() - 180 * 60000), date: new Date(Date.now() - 180 * 60000) },
+    { id: 8, type: 'center', severity: 'success', icon: 'add_business', title: 'Nuevo centro añadido', description: 'Clínica del Norte agregada al sistema', time: new Date(Date.now() - 240 * 60000), date: new Date(Date.now() - 240 * 60000) }
+];
+
+// Función para renderizar el timeline
+function renderTimeline() {
+    const container = document.getElementById('timeline-container');
+    const typeFilter = document.getElementById('timeline-type-filter').value;
+    const dateFilter = document.getElementById('timeline-date-filter').value;
+    
+    let filtered = timelineEvents;
+    
+    // Filtrar por tipo
+    if (typeFilter !== 'all') {
+        filtered = filtered.filter(event => event.type === typeFilter);
+    }
+    
+    // Filtrar por fecha
+    if (dateFilter) {
+        const selectedDate = new Date(dateFilter);
+        filtered = filtered.filter(event => {
+            const eventDate = new Date(event.date);
+            return eventDate.toDateString() === selectedDate.toDateString();
+        });
+    }
+    
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">event_busy</span>
+                <p class="mt-4 text-gray-500 dark:text-gray-400">No hay eventos que coincidan con los filtros</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = filtered.map((event, index) => {
+        const severityConfig = {
+            success: { bg: 'bg-green-100 dark:bg-green-900/20', text: 'text-green-600 dark:text-green-400', border: 'border-green-500' },
+            info: { bg: 'bg-blue-100 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-500' },
+            warning: { bg: 'bg-yellow-100 dark:bg-yellow-900/20', text: 'text-yellow-600 dark:text-yellow-400', border: 'border-yellow-500' },
+            error: { bg: 'bg-red-100 dark:bg-red-900/20', text: 'text-red-600 dark:text-red-400', border: 'border-red-500' }
+        };
+        
+        const config = severityConfig[event.severity] || severityConfig.info;
+        const timeAgo = getTimeAgo(event.time);
+        
+        return `
+            <div class="timeline-item flex items-start gap-4 p-4 rounded-lg hover:bg-background-light dark:hover:bg-background-dark transition-all border-l-4 ${config.border}" style="animation: slideInRight 0.3s ease-out ${index * 0.05}s backwards;">
+                <div class="${config.bg} ${config.text} rounded-full p-3 flex-shrink-0">
+                    <span class="material-symbols-outlined">${event.icon}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-2">
+                        <h3 class="font-bold text-text-light dark:text-text-dark">${escapeHtml(event.title)}</h3>
+                        <span class="text-xs text-subtext-light dark:text-subtext-dark whitespace-nowrap">${timeAgo}</span>
+                    </div>
+                    <p class="text-sm text-subtext-light dark:text-subtext-dark mt-1">${escapeHtml(event.description)}</p>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Función para calcular tiempo transcurrido
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    const intervals = {
+        año: 31536000,
+        mes: 2592000,
+        semana: 604800,
+        día: 86400,
+        hora: 3600,
+        minuto: 60
+    };
+    
+    for (let [name, secondsInInterval] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInInterval);
+        if (interval >= 1) {
+            return `Hace ${interval} ${name}${interval > 1 ? (name === 'mes' ? 'es' : 's') : ''}`;
+        }
+    }
+    
+    return 'Hace unos segundos';
+}
+
+// Función para filtrar timeline
+function filterTimeline() {
+    renderTimeline();
+}
+
+// Función para añadir nuevo evento al timeline (simulación)
+function addTimelineEvent(type, severity, icon, title, description) {
+    const newEvent = {
+        id: timelineEvents.length + 1,
+        type: type,
+        severity: severity,
+        icon: icon,
+        title: title,
+        description: description,
+        time: new Date(),
+        date: new Date()
+    };
+    
+    timelineEvents.unshift(newEvent);
+    renderTimeline();
+}
+
+// ==================== INICIALIZACIÓN ====================
+document.addEventListener('DOMContentLoaded', () => {
+    renderUsers();
+    renderCenters();
+    renderTimeline();
+    
+    // Establecer fecha de hoy en filtro de timeline
+    document.getElementById('timeline-date-filter').valueAsDate = new Date();
+    
+    // Smooth scroll para navegación interna
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Actualizar enlace activo
+                    document.querySelectorAll('aside a').forEach(link => {
+                        link.classList.remove('bg-primary/20', 'text-primary');
+                        link.classList.add('hover:bg-primary/10', 'dark:hover:bg-primary/20');
+                        link.querySelector('p').classList.remove('font-bold');
+                        link.querySelector('p').classList.add('font-medium');
+                    });
+                    
+                    this.classList.add('bg-primary/20', 'text-primary');
+                    this.classList.remove('hover:bg-primary/10', 'dark:hover:bg-primary/20');
+                    this.querySelector('p').classList.add('font-bold');
+                    this.querySelector('p').classList.remove('font-medium');
+                }
+            }
+        });
+    });
+});
+</script>
+
+<!-- 🔒 API Module con sanitización XSS -->
+<script src="js/api.js"></script>
+
+<!-- ✅ Navigation Module con función logout centralizada -->
+<script src="js/navigation.js"></script>
+
+<!-- 🆕 MÓDULO PRINCIPAL: Administrator Dashboard con CRUD completo -->
+<script type="module" src="js/modules/administrator-dashboard.js"></script>
+
+<!-- 🆕 MÓDULO DE ACCESIBILIDAD: WCAG 2.1 AA -->
+<script type="module" src="js/modules/accessibility.js"></script>
+
+<!-- NOTA: El JS inline anterior se mantiene para funcionalidades específicas (Timeline, Mapa)
+     que aún no están en el módulo. Se migrará completamente en próxima iteración. -->
+</body>
+</html>

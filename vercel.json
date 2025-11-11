@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/src/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "web/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/src/server.js"
+    },
+    {
+      "src": "/(.*\\.(html|css|js|png|jpg|jpeg|gif|svg|ico|webp))",
+      "dest": "web/$1"
+    },
+    {
+      "src": "/login",
+      "dest": "web/medical_appointment_login_page.html"
+    },
+    {
+      "src": "/register",
+      "dest": "web/medical_appointment_register_page.html"
+    },
+    {
+      "src": "/patient-dashboard",
+      "dest": "web/patient_dashboard.html"
+    },
+    {
+      "src": "/doctor-dashboard",
+      "dest": "web/doctor_dashboard.html"
+    },
+    {
+      "src": "/administrator-dashboard",
+      "dest": "web/administrator_dashboard.html"
+    },
+    {
+      "src": "/",
+      "dest": "web/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "web/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

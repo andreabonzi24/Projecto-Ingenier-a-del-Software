@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="description" content="Reservar Nueva Cita - Plataforma de Citas Médicas"/>
+    <title>Reservar Nueva Cita - Plataforma de Citas Médicas</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet"/>
+    <link href="css/navigation.css" rel="stylesheet"/>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0c7e7c",
+                        "background-light": "#f4f8f8",
+                        "background-dark": "#112121",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0e1b1b] dark:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            
+            <!-- Header / Navbar (insertado dinámicamente) -->
+            
+            <!-- Main Content -->
+            <main class="px-4 md:px-10 flex flex-1 justify-center py-8">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    
+                    <!-- Header -->
+                    <div class="flex flex-wrap justify-between gap-4 p-4">
+                        <div class="flex min-w-72 flex-col gap-3">
+                            <h1 class="text-[#0e1b1b] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">
+                                Reservar Nueva Cita
+                            </h1>
+                            <div class="flex items-center gap-2 text-primary text-base font-medium leading-normal">
+                                <span id="step-indicator">Paso 1 de 3: Especialidad</span>
+                                <span class="text-[#4d9997] dark:text-gray-400">&gt; Doctor &gt; Horario</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="px-4 mb-6">
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 33%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Select Specialty -->
+                    <div id="step-1" class="flex flex-col gap-8 mt-6">
+                        <div class="p-4">
+                            <h2 class="text-[#0e1b1b] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                ¿Qué tipo de cita necesitas?
+                            </h2>
+                            <div class="py-3">
+                                <label class="flex flex-col min-w-40 h-12 w-full">
+                                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                                        <div class="text-[#4d9997] dark:text-gray-400 flex border-none bg-white dark:bg-gray-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+                                            <span class="material-symbols-outlined">search</span>
+                                        </div>
+                                        <input 
+                                            id="specialty-search"
+                                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0e1b1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:border-primary h-full placeholder:text-gray-400 dark:placeholder-gray-500 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" 
+                                            placeholder="Buscar especialidad..." 
+                                            value=""
+                                        />
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-4 p-4" id="specialties-grid">
+                            <!-- Specialties -->
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="cardiologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">cardiology</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Cardiología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="dermatologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">dermatology</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Dermatología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="odontologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">dentistry</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Odontología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="ginecologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">woman</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Ginecología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="pediatria">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">child_care</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Pediatría</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="neurologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">neurology</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Neurología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="psicologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">psychology</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Psicología</p>
+                            </div>
+
+                            <div class="specialty-card flex flex-col gap-3 pb-3 items-center text-center cursor-pointer group" data-specialty="oftalmologia">
+                                <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-primary text-5xl">ophthalmology</span>
+                                </div>
+                                <p class="text-[#0e1b1b] dark:text-white text-base font-medium leading-normal">Oftalmología</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Select Doctor (Initially hidden) -->
+                    <div id="step-2" class="hidden flex flex-col gap-6 mt-6">
+                        <div class="p-4">
+                            <h2 class="text-[#0e1b1b] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                Selecciona un profesional
+                            </h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4" id="doctors-grid">
+                            <!-- Doctor cards will be inserted here -->
+                        </div>
+
+                        <div class="flex justify-between p-4">
+                            <button onclick="goToStep(1)" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white text-base font-bold leading-normal">
+                                <span class="material-symbols-outlined mr-2">arrow_back</span>
+                                <span>Anterior</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Select Time (Initially hidden) -->
+                    <div id="step-3" class="hidden flex flex-col gap-6 mt-6">
+                        <div class="p-4">
+                            <h2 class="text-[#0e1b1b] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                                Selecciona fecha y hora
+                            </h2>
+                        </div>
+
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Date Picker -->
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Fecha</label>
+                                    <input 
+                                        type="date" 
+                                        id="appointment-date"
+                                        class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-primary focus:border-primary"
+                                        min=""
+                                    />
+                                </div>
+
+                                <!-- Time Slots -->
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Horarios disponibles</label>
+                                    <div id="time-slots" class="grid grid-cols-2 gap-2">
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">09:00</button>
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">10:00</button>
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">11:00</button>
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">12:00</button>
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">15:00</button>
+                                        <button class="time-slot py-2 px-4 rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:border-primary hover:bg-primary/10 transition-colors">16:00</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div id="appointment-summary" class="mt-6 p-6 bg-primary/10 dark:bg-primary/20 rounded-xl hidden">
+                                <h3 class="font-bold text-lg mb-4">Resumen de tu cita</h3>
+                                <div class="space-y-2 text-sm">
+                                    <p><strong>Especialidad:</strong> <span id="summary-specialty"></span></p>
+                                    <p><strong>Profesional:</strong> <span id="summary-doctor"></span></p>
+                                    <p><strong>Fecha:</strong> <span id="summary-date"></span></p>
+                                    <p><strong>Hora:</strong> <span id="summary-time"></span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between p-4">
+                            <button onclick="goToStep(2)" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-gray-200 dark:bg-gray-700 text-[#0e1b1b] dark:text-white text-base font-bold leading-normal">
+                                <span class="material-symbols-outlined mr-2">arrow_back</span>
+                                <span>Anterior</span>
+                            </button>
+                            <button id="confirm-btn" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal disabled:opacity-50" disabled>
+                                <span>Confirmar Cita</span>
+                                <span class="material-symbols-outlined ml-2">check_circle</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+            
+            <!-- Footer (insertado dinámicamente) -->
+            
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/common.js"></script>
+    <script src="js/navigation-config.js"></script>
+    <script src="js/navigation-enhanced.js"></script>
+    
+    <script>
+        // Booking state
+        let bookingState = {
+            specialty: null,
+            doctor: null,
+            date: null,
+            time: null
+        };
+
+        let currentStep = 1;
+
+        // Sample doctors data
+        const doctorsData = {
+            cardiologia: [
+                { name: 'Dr. Ana Torres', hospital: 'Hospital Universitario', rating: 4.8 },
+                { name: 'Dr. Carlos Méndez', hospital: 'Clínica Central', rating: 4.6 }
+            ],
+            dermatologia: [
+                { name: 'Dra. Laura Gómez', hospital: 'Hospital San José', rating: 4.9 },
+                { name: 'Dr. Miguel Ruiz', hospital: 'Clínica Derma+', rating: 4.7 }
+            ],
+            default: [
+                { name: 'Dr. Juan Pérez', hospital: 'Centro Médico', rating: 4.5 },
+                { name: 'Dra. María López', hospital: 'Clínica Salud', rating: 4.6 }
+            ]
+        };
+
+        // Go to specific step
+        function goToStep(step) {
+            currentStep = step;
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.add('hidden');
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            
+            const progress = (step / 3) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            const indicators = ['Especialidad', 'Doctor', 'Horario'];
+            document.getElementById('step-indicator').textContent = `Paso ${step} de 3: ${indicators[step-1]}`;
+        }
+
+        // Handle specialty selection
+        document.querySelectorAll('.specialty-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const specialty = this.dataset.specialty;
+                bookingState.specialty = this.querySelector('p').textContent;
+                
+                // Load doctors for this specialty
+                const doctors = doctorsData[specialty] || doctorsData.default;
+                const doctorsGrid = document.getElementById('doctors-grid');
+                doctorsGrid.innerHTML = doctors.map(doctor => `
+                    <div class="doctor-card p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-shadow" data-doctor="${doctor.name}">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-primary/20 rounded-full size-12 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary">person</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-[#0e1b1b] dark:text-white">${doctor.name}</h3>
+                                <p class="text-sm text-[#4d9997] dark:text-gray-400">${doctor.hospital}</p>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                    <span class="text-sm font-medium">${doctor.rating}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add click handlers to doctor cards
+                document.querySelectorAll('.doctor-card').forEach(doctorCard => {
+                    doctorCard.addEventListener('click', function() {
+                        bookingState.doctor = this.dataset.doctor;
+                        goToStep(3);
+                        updateSummary();
+                    });
+                });
+                
+                goToStep(2);
+            });
+        });
+
+        // Handle time slot selection
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => {
+                    s.classList.remove('border-primary', 'bg-primary/10');
+                    s.classList.add('border-gray-300', 'dark:border-gray-600');
+                });
+                this.classList.add('border-primary', 'bg-primary/10');
+                this.classList.remove('border-gray-300', 'dark:border-gray-600');
+                bookingState.time = this.textContent;
+                updateSummary();
+            });
+        });
+
+        // Handle date selection
+        const dateInput = document.getElementById('appointment-date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        
+        dateInput.addEventListener('change', function() {
+            bookingState.date = this.value;
+            updateSummary();
+        });
+
+        // Update summary
+        function updateSummary() {
+            if (bookingState.specialty && bookingState.doctor && bookingState.date && bookingState.time) {
+                document.getElementById('appointment-summary').classList.remove('hidden');
+                document.getElementById('summary-specialty').textContent = bookingState.specialty;
+                document.getElementById('summary-doctor').textContent = bookingState.doctor;
+                document.getElementById('summary-date').textContent = new Date(bookingState.date).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('summary-time').textContent = bookingState.time;
+                document.getElementById('confirm-btn').disabled = false;
+            }
+        }
+
+        // Handle confirmation
+        document.getElementById('confirm-btn').addEventListener('click', function() {
+            showSuccessMessage('¡Cita reservada con éxito!');
+            setTimeout(() => {
+                window.location.href = 'patient_dashboard.html';
+            }, 2000);
+        });
+
+        // Search functionality
+        document.getElementById('specialty-search').addEventListener('input', function() {
+            const search = this.value.toLowerCase();
+            document.querySelectorAll('.specialty-card').forEach(card => {
+                const text = card.querySelector('p').textContent.toLowerCase();
+                card.style.display = text.includes(search) ? 'flex' : 'none';
+            });
+        });
+    </script>
+
+    <!-- 🔒 PROTECCIÓN JWT -->
+    <script src="js/api.js"></script>
+    <script>
+        // CRÍTICO: Proteger acceso - Solo pacientes autenticados
+        protectPage('paciente');
+    </script>
+</body>
+</html>
