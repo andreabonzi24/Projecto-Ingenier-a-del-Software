@@ -65,7 +65,7 @@ El servidor estará disponible en: **http://localhost:3000**
 ## 📖 Documentación Completa
 
 Para documentación detallada, consulta:
-**[/docs/99_BACKEND_REBUILD_REPORT.md](docs/99_BACKEND_REBUILD_REPORT.md)**
+**[/docs/99_BACKEND_REBUILD_REPORT.md](docs/00_MASTER_DOCUMENTATION.md)**
 
 Incluye:
 - Arquitectura completa
@@ -140,4 +140,4 @@ const data = await response.json();
 
 ---
 
-*Ver [documentación completa](docs/99_BACKEND_REBUILD_REPORT.md) para más detalles.*
+*Ver [documentación completa](docs/00_MASTER_DOCUMENTATION.md) para más detalles.*
