@@ -6,6 +6,9 @@ const connectDB = require('./config/db');
 
 // Importar rutas
 const authRoutes = require('./routes/auth.routes');
+const boardRoutes = require('./routes/boards');
+const cardRoutes = require('./routes/cards');
+const projectRoutes = require('./routes/projects');
 
 // Crear aplicación Express
 const app = express();
@@ -23,6 +26,10 @@ app.use(express.static(path.join(__dirname, '../../web')));
 
 // Rutas de la API
 app.use('/api/auth', authRoutes);
+app.use('/api/boards', boardRoutes);
+app.use('/api/boards/:boardId/cards', cardRoutes);
+app.use('/api/cards', cardRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Ruta de prueba
 app.get('/api/health', (req, res) => {
@@ -46,6 +53,24 @@ app.get('/api', (req, res) => {
         register: 'POST /api/auth/register',
         login: 'POST /api/auth/login',
         me: 'GET /api/auth/me (requiere token)'
+      },
+      boards: {
+        list: 'GET /api/boards',
+        create: 'POST /api/boards',
+        get: 'GET /api/boards/:id',
+        update: 'PUT /api/boards/:id',
+        delete: 'DELETE /api/boards/:id'
+      },
+      cards: {
+        list: 'GET /api/boards/:boardId/cards',
+        create: 'POST /api/boards/:boardId/cards',
+        update: 'PUT /api/cards/:id',
+        delete: 'DELETE /api/cards/:id'
+      },
+      projects: {
+        list: 'GET /api/projects',
+        create: 'POST /api/projects',
+        roadmap: 'GET /api/projects/:id/roadmap'
       }
     }
   });
