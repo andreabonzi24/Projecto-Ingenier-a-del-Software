@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tableros - Plataforma Médica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .board-column {
+            min-height: 400px;
+            min-width: 300px;
+        }
+        .card-item {
+            cursor: move;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .dragging {
+            opacity: 0.5;
+        }
+        .drag-over {
+            border: 2px dashed #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-hospital text-blue-600 text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">Plataforma Médica</span>
+                    <span class="ml-4 text-gray-500">|</span>
+                    <span class="ml-4 text-gray-700">Gestión de Tableros</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='project_roadmaps.html'" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-road mr-2"></i>Roadmaps
+                    </button>
+                    <button onclick="showCreateBoardModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Nuevo Tablero
+                    </button>
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-2xl text-gray-600"></i>
+                        <span id="userName" class="ml-2 text-gray-700"></span>
+                    </div>
+                    <button onclick="logout()" class="text-gray-600 hover:text-red-600">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Boards List -->
+        <div id="boardsListSection" class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Mis Tableros</h2>
+            <div id="boardsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Boards will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Board View -->
+        <div id="boardViewSection" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                    <button onclick="showBoardsList()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 id="boardTitle" class="text-2xl font-bold text-gray-800"></h2>
+                    <button onclick="showBoardSettings()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <button onclick="showCreateCardModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    <i class="fas fa-plus mr-2"></i>Nueva Tarjeta
+                </button>
+            </div>
+            <p id="boardDescription" class="text-gray-600 mb-6"></p>
+            
+            <!-- Kanban Board -->
+            <div id="kanbanBoard" class="flex space-x-6 overflow-x-auto pb-4">
+                <!-- Columns will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Board Modal -->
+    <div id="createBoardModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Crear Nuevo Tablero</h3>
+            <form id="createBoardForm" onsubmit="createBoard(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                    <input type="text" id="boardTitle" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                    <textarea id="boardDescription" rows="3"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Visibilidad</label>
+                    <select id="boardVisibility" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="private">Privado</option>
+                        <option value="team">Equipo</option>
+                        <option value="public">Público</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideCreateBoardModal()" 
+                            class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancelar</button>
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Card Modal -->
+    <div id="createCardModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Crear Nueva Tarjeta</h3>
+            <form id="createCardForm" onsubmit="createCard(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                    <input type="text" id="cardTitle" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                    <textarea id="cardDescription" rows="3"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Columna</label>
+                    <select id="cardColumn" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <!-- Columns will be loaded here -->
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Prioridad</label>
+                    <select id="cardPriority" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="low">Baja</option>
+                        <option value="medium" selected>Media</option>
+                        <option value="high">Alta</option>
+                        <option value="urgent">Urgente</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Fecha límite</label>
+                    <input type="date" id="cardDueDate"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideCreateCardModal()" 
+                            class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancelar</button>
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/modules/boards.js"></script>
+</body>
+</html>

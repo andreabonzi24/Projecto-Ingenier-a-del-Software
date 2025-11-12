@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Roadmaps - Plataforma Médica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            padding-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: -30px;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 4px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #3b82f6;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+        .timeline-dot.completed {
+            background: #10b981;
+            box-shadow: 0 0 0 2px #10b981;
+        }
+        .gantt-bar {
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .gantt-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-hospital text-blue-600 text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">Plataforma Médica</span>
+                    <span class="ml-4 text-gray-500">|</span>
+                    <span class="ml-4 text-gray-700">Project Roadmaps</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='boards.html'" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-columns mr-2"></i>Tableros
+                    </button>
+                    <button onclick="showCreateProjectModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Nuevo Proyecto
+                    </button>
+                    <div class="flex items-center">
+                        <i class="fas fa-user-circle text-2xl text-gray-600"></i>
+                        <span id="userName" class="ml-2 text-gray-700"></span>
+                    </div>
+                    <button onclick="logout()" class="text-gray-600 hover:text-red-600">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Projects List -->
+        <div id="projectsListSection" class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Mis Proyectos</h2>
+            <div id="projectsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Roadmap View -->
+        <div id="roadmapViewSection" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                    <button onclick="showProjectsList()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <div>
+                        <h2 id="projectTitle" class="text-2xl font-bold text-gray-800"></h2>
+                        <p id="projectDates" class="text-sm text-gray-600 mt-1"></p>
+                    </div>
+                    <div id="projectStatus" class="status-badge"></div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white rounded-lg px-4 py-2 shadow-sm border">
+                        <div class="text-sm text-gray-600">Progreso</div>
+                        <div class="text-2xl font-bold text-blue-600" id="projectProgress">0%</div>
+                    </div>
+                    <button onclick="showProjectSettings()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-cog text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Tabs -->
+            <div class="bg-white rounded-lg shadow-sm border mb-6">
+                <div class="flex border-b">
+                    <button onclick="switchView('roadmap')" 
+                            class="view-tab px-6 py-3 font-medium text-blue-600 border-b-2 border-blue-600" 
+                            data-view="roadmap">
+                        <i class="fas fa-road mr-2"></i>Roadmap
+                    </button>
+                    <button onclick="switchView('timeline')" 
+                            class="view-tab px-6 py-3 font-medium text-gray-600 hover:text-blue-600" 
+                            data-view="timeline">
+                        <i class="fas fa-stream mr-2"></i>Timeline
+                    </button>
+                    <button onclick="switchView('table')" 
+                            class="view-tab px-6 py-3 font-medium text-gray-600 hover:text-blue-600" 
+                            data-view="table">
+                        <i class="fas fa-table mr-2"></i>Table
+                    </button>
+                </div>
+            </div>
+
+            <!-- Roadmap View Content -->
+            <div id="roadmapContent" class="view-content">
+                <!-- Milestones Section -->
+                <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">
+                            <i class="fas fa-flag-checkered mr-2 text-blue-600"></i>Milestones
+                        </h3>
+                        <button onclick="showCreateMilestoneModal()" class="text-blue-600 hover:text-blue-700">
+                            <i class="fas fa-plus mr-1"></i>Agregar
+                        </button>
+                    </div>
+                    <div id="milestonesList" class="space-y-3">
+                        <!-- Milestones will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Tasks Gantt Chart -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-tasks mr-2 text-blue-600"></i>Tareas del Proyecto
+                    </h3>
+                    <div id="ganttChart">
+                        <!-- Gantt chart will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline View Content -->
+            <div id="timelineContent" class="view-content hidden">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <div id="timelineView" class="timeline">
+                        <!-- Timeline will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table View Content -->
+            <div id="tableContent" class="view-content hidden">
+                <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200" id="tasksTable">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarea</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioridad</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asignado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fechas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progreso</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Table rows will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Project Modal -->
+    <div id="createProjectModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Crear Nuevo Proyecto</h3>
+            <form id="createProjectForm" onsubmit="createProject(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+                    <input type="text" id="projectTitleInput" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                    <textarea id="projectDescriptionInput" rows="3"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Inicio</label>
+                    <input type="date" id="projectStartDate" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Fecha de Fin</label>
+                    <input type="date" id="projectEndDate" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideCreateProjectModal()" 
+                            class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancelar</button>
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/modules/roadmaps.js"></script>
+</body>
+</html>
