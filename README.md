@@ -1,6 +1,28 @@
-# 🏥 Backend - Plataforma de Citas Médicas
+# 🏥 Plataforma de Citas Médicas con Sistema de Gestión de Proyectos
 
-API REST completa para gestión de citas médicas con autenticación JWT.
+API REST completa para gestión de citas médicas con autenticación JWT, incluyendo sistema de tableros Kanban y roadmaps de proyectos estilo GitHub.
+
+## ✨ Nuevas Características
+
+### 📋 Sistema de Tableros Kanban
+- Gestión de tableros con columnas personalizables
+- Drag & drop para mover tarjetas
+- Prioridades, etiquetas y fechas límite
+- Comentarios y listas de verificación
+- Gestión de miembros con roles
+
+**Acceso:** [http://localhost:3000/boards.html](http://localhost:3000/boards.html)
+
+### 🗺️ Project Roadmaps (Estilo GitHub)
+- Visualización de proyectos con líneas de tiempo
+- Gráficos Gantt interactivos
+- Gestión de milestones
+- Múltiples vistas (Roadmap, Timeline, Table)
+- Seguimiento de progreso en tiempo real
+
+**Acceso:** [http://localhost:3000/project_roadmaps.html](http://localhost:3000/project_roadmaps.html)
+
+**📖 Documentación completa:** [docs/BOARDS_AND_ROADMAPS.md](docs/BOARDS_AND_ROADMAPS.md)
 
 ## 🚀 Inicio Rápido
 
@@ -55,6 +77,25 @@ El servidor estará disponible en: **http://localhost:3000**
 - `POST /api/auth/login` - Iniciar sesión
 - `GET /api/auth/me` - Obtener usuario actual (requiere token)
 
+### Tableros y Tarjetas
+
+- `GET /api/boards` - Listar tableros del usuario
+- `POST /api/boards` - Crear nuevo tablero
+- `GET /api/boards/:id` - Obtener tablero específico
+- `PUT /api/boards/:id` - Actualizar tablero
+- `DELETE /api/boards/:id` - Eliminar tablero
+- `GET /api/boards/:boardId/cards` - Listar tarjetas
+- `POST /api/boards/:boardId/cards` - Crear tarjeta
+- `PUT /api/cards/:id/move` - Mover tarjeta entre columnas
+
+### Proyectos y Roadmaps
+
+- `GET /api/projects` - Listar proyectos del usuario
+- `POST /api/projects` - Crear nuevo proyecto
+- `GET /api/projects/:id` - Obtener proyecto específico
+- `GET /api/projects/:id/roadmap` - Obtener roadmap del proyecto
+- `PUT /api/projects/:id` - Actualizar proyecto
+
 ### Health Check
 
 - `GET /api/health` - Verificar estado del servidor
@@ -64,8 +105,12 @@ El servidor estará disponible en: **http://localhost:3000**
 
 ## 📖 Documentación Completa
 
-Para documentación detallada, consulta:
-**[/docs/99_BACKEND_REBUILD_REPORT.md](docs/00_MASTER_DOCUMENTATION.md)**
+### Nuevas Características:
+- **[Sistema de Tableros y Roadmaps](docs/BOARDS_AND_ROADMAPS.md)** - Guía completa de uso
+- **[Resumen de Seguridad](docs/SECURITY_SUMMARY.md)** - Análisis de seguridad
+
+### Documentación General:
+- **[Documentación Master](docs/00_MASTER_DOCUMENTATION.md)** - Documentación completa del backend
 
 Incluye:
 - Arquitectura completa
