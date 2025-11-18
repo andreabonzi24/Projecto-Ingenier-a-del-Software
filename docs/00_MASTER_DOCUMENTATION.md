@@ -153,6 +153,21 @@ La **Plataforma de Citas Médicas** es un sistema web completo y funcional que c
 
 ---
 
+🔧 3.1 Metodología de Desarrollo del Proyecto (SCRUM + XP)
+El desarrollo de la Plataforma de Citas Médicas se ha basado en una metodología ágil, concretamente en Scrum, complementada con prácticas de Extreme Programming (XP). Este enfoque ha permitido un desarrollo iterativo, entregas frecuentes y adaptación continua a cambios en los requisitos.
+Principios Aplicados
+Sprints cortos (2–5 días): permitiendo ciclos de entrega rápidos.
+Backlog priorizado: organizado por seguridad, autenticación, dashboards y citas.
+Revisión + Retrospectiva: mejoras constantes tras cada iteración.
+Prototipado incremental: login, dashboards, API y seguridad construidos en incrementos.
+Prácticas XP empleadas:
+Refactoring continuo
+Simplicidad del código
+Testing incremental
+Feedback inmediato
+Este modelo permitió entregar un MVP funcional desde el inicio, aumentar la seguridad en ciclos sucesivos y mantener una arquitectura limpia y escalable durante todo el desarrollo.
+
+
 ## 🗂️ Guía de Navegación de Documentos
 
 Esta documentación está organizada por temáticas para facilitar su consulta:
