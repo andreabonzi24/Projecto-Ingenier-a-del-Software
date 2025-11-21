@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
+const { rateLimiter } = require('./middlewares/rateLimiter');
+const { securityHeaders } = require('./middlewares/securityHeaders');
 
 // Importar rutas
 const authRoutes = require('./routes/auth.routes');
@@ -10,11 +12,44 @@ const authRoutes = require('./routes/auth.routes');
 // Crear aplicación Express
 const app = express();
 
+// Validar variables de entorno críticas
+const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
+requiredEnvVars.forEach((variable) => {
+  if (!process.env[variable]) {
+    console.error(`❌ Falta la variable de entorno requerida: ${variable}`);
+    process.exit(1);
+  }
+});
+
+// Deshabilitar cabecera de tecnología y confiar en proxy inverso (útil en despliegues)
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
 // Conectar a la base de datos
 connectDB();
 
+// Configuración de CORS segura
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Origen no permitido por la política CORS'));
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
 app.use(cors());
+app.use(cors(corsOptions));
+app.use(securityHeaders);
+app.use('/api', rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,57 +75,3 @@ app.get('/api', (req, res) => {
     success: true,
     message: 'API de Plataforma de Citas Médicas',
     version: '1.0.0',
-    endpoints: {
-      health: '/api/health',
-      auth: {
-        register: 'POST /api/auth/register',
-        login: 'POST /api/auth/login',
-        me: 'GET /api/auth/me (requiere token)'
-      }
-    }
-  });
-});
-
-// Manejo de rutas no encontradas de la API
-app.use('/api/*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Ruta de API no encontrada'
-  });
-});
-
-// Servir el frontend para cualquier otra ruta
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../web/index.html'));
-});
-
-// Manejo de errores global
-app.use((err, req, res, next) => {
-  console.error('Error global:', err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Error interno del servidor',
-    error: process.env.NODE_ENV === 'development' ? err.stack : undefined
-  });
-});
-
-// Puerto
-const PORT = process.env.PORT || 3000;
-
-// Iniciar servidor solo si no está en Vercel (entorno serverless)
-// En Vercel, la exportación de 'app' es suficiente
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log('');
-    console.log('🚀 ═══════════════════════════════════════════════════════');
-    console.log(`   Servidor iniciado en modo ${process.env.NODE_ENV || 'development'}`);
-    console.log(`   Puerto: ${PORT}`);
-    console.log(`   URL: http://localhost:${PORT}`);
-    console.log(`   API: http://localhost:${PORT}/api`);
-    console.log('🚀 ═══════════════════════════════════════════════════════');
-    console.log('');
-  });
-}
-
-// Exportar la aplicación para Vercel
-module.exports = app;
