@@ -1,0 +1,27 @@
+{
+  "name": "plataforma-citas-medicas",
+  "version": "1.0.0",
+  "description": "Plataforma de Citas Médicas - Configuración CI/CD y herramientas de desarrollo",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "test": "jest --config jest.config.js || node tests/run-sanity-test.js",
+    "test:coverage": "jest --config jest.config.js --coverage"
+  },
+  "keywords": [
+    "medical",
+    "appointments",
+    "healthcare",
+    "platform"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

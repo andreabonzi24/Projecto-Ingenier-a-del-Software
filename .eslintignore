@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+coverage
+*.min.js
+# Exclude existing code directories with pre-existing lint issues
+web/
+webs/
+cap_web/
+backend/
+# Exclude existing config files
+tailwind.config.js
+vercel.json
