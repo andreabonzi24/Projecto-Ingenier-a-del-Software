@@ -1,6 +1,6 @@
 /**
- * Fallback sanity test script
- * Runs if Jest is not available or fails to initialize.
+ * Sanity test script for project structure validation
+ * Run with: npm run test:sanity
  * This script performs basic checks to verify the project structure.
  */
 

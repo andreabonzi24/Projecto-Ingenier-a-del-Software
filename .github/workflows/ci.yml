@@ -2,6 +2,9 @@ name: CI
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +24,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-      - name: Build (optional)
-        if: success()
-        run: npm run build || echo 'No build script found'

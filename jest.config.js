@@ -2,11 +2,10 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/tests/**/*.test.js'],
   collectCoverageFrom: [
-    '**/*.js',
+    'tests/**/*.js',
+    'examples/**/*.js',
     '!node_modules/**',
-    '!coverage/**',
-    '!jest.config.js',
-    '!tailwind.config.js'
+    '!coverage/**'
   ],
   coverageDirectory: 'coverage',
   verbose: true

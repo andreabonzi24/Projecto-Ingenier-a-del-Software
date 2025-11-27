@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
-    "test": "jest --config jest.config.js || node tests/run-sanity-test.js",
+    "test": "jest --config jest.config.js",
+    "test:sanity": "node tests/run-sanity-test.js",
     "test:coverage": "jest --config jest.config.js --coverage"
   },
   "keywords": [
