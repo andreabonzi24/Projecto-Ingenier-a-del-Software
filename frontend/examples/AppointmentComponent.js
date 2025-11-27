@@ -194,14 +194,14 @@ class AppointmentComponent {
     const appointmentsHtml = this.appointments.map(apt => `
       <div class="appointment-card" data-id="${apt.id || apt._id}">
         <div class="appointment-info">
-          <h4>Dr. ${apt.doctor || apt.doctorName || 'Unknown'}</h4>
+          <h4>Dr. ${this.escapeHtml(apt.doctor || apt.doctorName || 'Unknown')}</h4>
           <p class="date">${this.formatDate(apt.date)}</p>
-          <p class="time">${apt.time || 'Time TBD'}</p>
-          <p class="status ${apt.status || 'pending'}">${apt.status || 'Pending'}</p>
-          ${apt.reason ? `<p class="reason">${apt.reason}</p>` : ''}
+          <p class="time">${this.escapeHtml(apt.time || 'Time TBD')}</p>
+          <p class="status ${this.escapeHtml(apt.status || 'pending')}">${this.escapeHtml(apt.status || 'Pending')}</p>
+          ${apt.reason ? `<p class="reason">${this.escapeHtml(apt.reason)}</p>` : ''}
         </div>
         <div class="appointment-actions">
-          <button class="btn-cancel" onclick="appointmentComponent.cancelAppointment('${apt.id || apt._id}')">
+          <button class="btn-cancel" data-appointment-id="${apt.id || apt._id}">
             Cancel
           </button>
         </div>
@@ -209,6 +209,32 @@ class AppointmentComponent {
     `).join('');
 
     listContainer.innerHTML = appointmentsHtml;
+    this.attachCancelListeners();
+  }
+
+  /**
+   * Attach cancel button event listeners
+   */
+  attachCancelListeners() {
+    const cancelButtons = this.container.querySelectorAll('.btn-cancel');
+    cancelButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const appointmentId = e.target.dataset.appointmentId;
+        this.cancelAppointment(appointmentId);
+      });
+    });
+  }
+
+  /**
+   * Escape HTML to prevent XSS
+   */
+  escapeHtml(text) {
+    if (typeof text !== 'string') {
+      return text;
+    }
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   /**

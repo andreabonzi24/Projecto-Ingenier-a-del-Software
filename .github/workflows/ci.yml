@@ -6,13 +6,16 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [lts/*]
+        node-version: [18.x, 20.x, lts/*]
 
     steps:
       - name: Checkout repository
