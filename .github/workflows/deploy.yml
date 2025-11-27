@@ -1,0 +1,87 @@
+# Deploy Workflow - Plataforma de Citas Médicas
+# Despliegue automático a Vercel (placeholder)
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run tests before deploy
+        working-directory: ./backend
+        run: npm test --if-present
+        continue-on-error: true
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-secret-key
+
+      - name: Build application
+        working-directory: ./backend
+        run: npm run build --if-present
+
+      # Placeholder para despliegue a Vercel
+      # Para activar, configurar VERCEL_TOKEN en secrets del repositorio
+      # - name: Deploy to Vercel (Staging)
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      #     working-directory: ./
+
+      - name: Deployment Summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Staging" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: Ready for Vercel deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "Configure VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID secrets to enable automatic deployment." >> $GITHUB_STEP_SUMMARY
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Production Deployment Placeholder
+        run: |
+          echo "## Production Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Production deployment requires manual approval." >> $GITHUB_STEP_SUMMARY
+          echo "This is a placeholder - configure Vercel or your hosting provider." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Checklist" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] All tests passing" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Staging deployment verified" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Environment variables configured" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Database migrations ready" >> $GITHUB_STEP_SUMMARY
