@@ -9,6 +9,9 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
@@ -32,7 +35,6 @@ jobs:
       - name: Run ESLint
         working-directory: ./backend
         run: npm run lint --if-present
-        continue-on-error: true
 
   test:
     name: Test
@@ -61,7 +63,6 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         run: npm test --if-present
-        continue-on-error: true
         env:
           NODE_ENV: test
           JWT_SECRET: test-secret-key
@@ -94,8 +95,14 @@ jobs:
         working-directory: ./backend
         run: |
           timeout 10s node src/server.js &
+          SERVER_PID=$!
           sleep 5
-          curl -f http://localhost:3000/api/health || true
+          if curl -sf http://localhost:3000/api/health > /dev/null 2>&1; then
+            echo "Health check passed"
+          else
+            echo "Health check failed or endpoint not available (non-blocking)"
+          fi
+          kill $SERVER_PID 2>/dev/null || true
         env:
           NODE_ENV: development
           PORT: 3000
