@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+.vercel/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Log files
+*.log
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Package lock files (auto-generated)
+package-lock.json
+
+# Configuration files that shouldn't be linted
+*.min.js
+*.bundle.js
+
+# HTML files (optional, can be removed if HTML linting is needed)
+*.html
+
+# Documentation
+docs/
+*.md
+
+# Images and assets
+img/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+
+# Vercel
+vercel.json
+
+# Cap web (legacy/external)
+cap_web/
+webs/

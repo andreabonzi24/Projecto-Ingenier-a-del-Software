@@ -140,4 +140,40 @@ const data = await response.json();
 
 ---
 
+## 🔄 CI/CD (Integración Continua)
+
+Este proyecto incluye un pipeline de CI/CD automatizado usando GitHub Actions.
+
+### Ejecución Automática
+
+El pipeline se ejecuta automáticamente en:
+- Push a las ramas `main`, `feature/*`, y `copilot/*`
+- Pull requests hacia `main`
+
+### Comandos Locales
+
+```bash
+# Navegar al directorio backend
+cd backend
+
+# Instalar dependencias
+npm install
+
+# Ejecutar linter
+npm run lint
+
+# Corregir errores de lint automáticamente
+npm run lint:fix
+
+# Ejecutar tests
+npm test
+```
+
+### Documentación CI
+
+Para más detalles sobre la configuración de CI/CD, consulta:
+**[.github/README-CI.md](.github/README-CI.md)**
+
+---
+
 *Ver [documentación completa](docs/00_MASTER_DOCUMENTATION.md) para más detalles.*
