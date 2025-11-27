@@ -134,6 +134,39 @@ const data = await response.json();
 
 ---
 
+## 🔄 CI/CD (Integración Continua)
+
+Este proyecto incluye configuración de CI/CD con GitHub Actions.
+
+### Ejecutar localmente
+
+```bash
+# Instalar dependencias (desde la raíz del proyecto)
+npm install
+
+# Ejecutar linter
+npm run lint
+
+# Corregir errores de lint automáticamente
+npm run lint:fix
+
+# Ejecutar tests
+npm test
+
+# Ejecutar tests con cobertura
+npm run test:coverage
+```
+
+### Configuración
+
+- **Workflow**: `.github/workflows/ci.yml`
+- **ESLint**: `.eslintrc.json`
+- **Jest**: `jest.config.js`
+
+Para más detalles, ver [.github/README-CI.md](.github/README-CI.md).
+
+---
+
 ## ✨ Estado
 
 ✅ **100% Funcional** - Listo para desarrollo y producción
