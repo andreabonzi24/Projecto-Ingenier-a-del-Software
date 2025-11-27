@@ -694,7 +694,7 @@ Validar que el sistema está listo para la demostración final.
 ## CI/CD (Sprint 3-4)
 
 ### Issue 23: Workflow CI
-**Estado:** 🆕 NUEVO (Implementado en este PR)
+**Estado:** ✅ Implementado en este PR
 
 | Campo | Valor |
 |-------|-------|
@@ -808,7 +808,7 @@ Preparar la presentación final del proyecto.
 ---
 
 ### Issue 27: Crear demo guiada
-**Estado:** 🆕 NUEVO
+**Estado:** 🔄 Parcialmente implementado (docs creados)
 
 | Campo | Valor |
 |-------|-------|

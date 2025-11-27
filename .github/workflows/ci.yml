@@ -91,6 +91,8 @@ jobs:
         working-directory: ./backend
         run: npm run build --if-present
 
+      # Health check is optional - only succeeds if /api/health endpoint exists
+      # The endpoint should be implemented in the backend for full functionality
       - name: Verify server starts
         working-directory: ./backend
         run: |
@@ -100,7 +102,7 @@ jobs:
           if curl -sf http://localhost:3000/api/health > /dev/null 2>&1; then
             echo "Health check passed"
           else
-            echo "Health check failed or endpoint not available (non-blocking)"
+            echo "Health check endpoint not available (non-blocking until endpoint is implemented)"
           fi
           kill $SERVER_PID 2>/dev/null || true
         env:
