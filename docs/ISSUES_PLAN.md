@@ -917,4 +917,4 @@ gh issue create \
 
 ---
 
-*Documento generado el 29 de Noviembre de 2025*
+*Documento generado el 29 de noviembre de 2025*
