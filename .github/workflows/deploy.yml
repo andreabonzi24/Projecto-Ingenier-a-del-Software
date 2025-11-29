@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
     inputs:
       environment:
@@ -14,6 +14,9 @@ on:
           - staging
           - production
 
+permissions:
+  contents: read
+
 # Placeholder workflow for deployment
 # Configure with actual deployment targets when ready
 
@@ -21,6 +24,8 @@ jobs:
   deploy-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'staging')
     environment:
       name: staging
@@ -63,6 +68,8 @@ jobs:
   deploy-production:
     name: Deploy to Production
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
     environment:
       name: production
@@ -106,6 +113,7 @@ jobs:
   health-check:
     name: Health Check
     runs-on: ubuntu-latest
+    permissions: {}
     needs: [deploy-production]
     if: github.ref == 'refs/heads/main'
     
