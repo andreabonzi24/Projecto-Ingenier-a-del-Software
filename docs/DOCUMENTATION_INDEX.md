@@ -20,9 +20,11 @@
 | **07** | [07_AUDIT_AND_IMPROVEMENTS.md](07_AUDIT_AND_IMPROVEMENTS.md) | 🔍 Auditoría técnica y mejoras accionables | ~50 KB | 2025-11-01 |
 | **08** | [08_FINAL_STATUS_AND_CHANGES.md](08_FINAL_STATUS_AND_CHANGES.md) | 📝 Registro de cambios y estado final del proyecto | ~25 KB | 2025-11-01 |
 | **09** | [09_APPENDIX_AND_REFERENCES.md](09_APPENDIX_AND_REFERENCES.md) | 📚 Glosario, referencias y material auxiliar | ~15 KB | 2025-11-01 |
-| - | [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) | 📇 Este archivo (índice global) | ~8 KB | 2025-11-01 |
+| **10** | [10_CI_CD.md](10_CI_CD.md) | 🔄 CI/CD e Integración Continua | ~9 KB | 2025-11-29 |
+| - | [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) | 📇 Este archivo (índice global) | ~8 KB | 2025-11-29 |
+| - | [ISSUES_PLAN.md](ISSUES_PLAN.md) | 📋 Plan de issues SCRUM + XP | ~28 KB | 2025-11-29 |
 
-**Total:** 11 documentos principales (~250 KB de documentación)
+**Total:** 13 documentos principales (~300 KB de documentación)
 
 ---
 
@@ -65,6 +67,8 @@
 | Documento | Utilidad |
 |-----------|----------|
 | `09_APPENDIX_AND_REFERENCES.md` | Glosario, enlaces externos, material auxiliar |
+| `10_CI_CD.md` | Configuración de CI/CD, GitHub Actions, ESLint |
+| `ISSUES_PLAN.md` | Plan de 28 issues SCRUM + XP para el proyecto |
 | `DOCUMENTATION_INDEX.md` | Navegación rápida (este archivo) |
 
 ---
