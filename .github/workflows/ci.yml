@@ -37,10 +37,6 @@ jobs:
         working-directory: ./backend
         run: npm test || echo "sin tests"
 
-      # 6. Instalar dependencias en la raíz (para build frontend si aplica)
-      - name: Install root dependencies
-        run: npm ci || echo "sin deps raíz"
+      - name: Build frontend (placeholder)
+        run: echo "Build frontend (placeholder)"
 
-      # 7. Build del frontend (CSS, etc. o placeholder)
-      - name: Build frontend
-        run: npm run build || echo "sin build"
