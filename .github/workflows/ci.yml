@@ -11,32 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Descargar el código del repositorio
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Configurar Node.js (misma versión que usamos en el proyecto)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "npm"
 
-      # 3. Instalar dependencias del backend
+      # --- BACKEND ---
       - name: Install backend dependencies
         working-directory: ./backend
-        run: npm ci || echo "sin deps backend"
+        run: npm install
 
-      # 4. Lint del backend (calidad de código)
       - name: Lint backend
         working-directory: ./backend
-        run: npm run lint || echo "sin lint"
+        run: npm run lint || echo "no lint"
 
-      # 5. Tests del backend (Jest o placeholder)
       - name: Test backend
         working-directory: ./backend
-        run: npm test || echo "sin tests"
+        run: npm test || echo "no tests"
 
+      # --- FRONTEND BUILD (placeholder) ---
       - name: Build frontend (placeholder)
         run: echo "Build frontend (placeholder)"
+
 
